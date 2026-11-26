@@ -565,6 +565,7 @@ function sendSheetEvent(event,details){
     xp:state.xp||0,
     progress:doneCount?doneCount():0,
     scores:state.scores||null,
+    skillPercentages:skillPercentages(state.scores),
     answers:state.answers||[],
     userAgent:navigator.userAgent||'',
     page:location.href,
@@ -608,6 +609,14 @@ function streak(){var set=activitySet();var d=today();if(!set[d])d=addDays(d,-1)
 function doneCount(){return Object.keys(state.done).length;}
 function sortedSkills(sc){return SKILLS.slice().sort(function(a,b){return sc[a.id]-sc[b.id]||a.i-b.i;});}
 function weakest(n){return sortedSkills(state.scores).slice(0,n);}
+function skillPercentages(sc){
+  var result={};
+  SKILLS.forEach(function(skill){
+    var value=sc&&typeof sc[skill.id]==='number'?sc[skill.id]:0;
+    result[skill.id]=Math.round(value/5*100);
+  });
+  return result;
+}
 function buildJourney(sc){
   var order=sortedSkills(sc).map(function(s){return s.id;});
   var rounds=[order,order.slice(0,6),order.slice(0,3)];var j=[];
@@ -657,7 +666,7 @@ function viewOnboarding(){
     sk.map(function(x){var p=Math.round(sc[x.id]/5*100);return '<div class="skrow" style="--c:'+x.c+'"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span class="row" style="flex-wrap:nowrap;min-width:0"><span class="sk-dot">'+ic(x.id,15)+'</span><b>'+esc(x.name)+'</b></span><span class="num">'+p+'%</span></div><div class="track"><i class="now" style="width:'+p+'%"></i></div>'+(prio[x.id]?'<span class="chip prio" style="justify-self:start">Prioridad</span>':'')+'</div>';}).join('')+'</section>';
   }).join('');
   return '<div class="stack" style="padding-top:2vh">'+mrow(100,'cheer','Listo, '+ui.reg.name.trim().split(/\s+/)[0]+'. Armé tu ruta y vamos a empezar por '+w.map(function(x){return x.name.toLowerCase();}).join(', ').replace(/, ([^,]*)$/,' y $1')+'.')+
-  '<h1 style="font-size:1.7rem">Tu diagnóstico por categoría</h1>'+blocks+
+  '<h1 style="font-size:1.7rem">Porcentaje de tus habilidades blandas</h1>'+blocks+
   '<p class="muted">Tu ruta tiene <b style="color:var(--ink)">19 niveles</b>, uno por día. Primero cubres las 10 habilidades, luego refuerzas las 6 más débiles y al final las 3 prioritarias.</p>'+
   '<button class="btn primary big" data-act="ob-finish">Comenzar mi ruta</button></div>';
 }
