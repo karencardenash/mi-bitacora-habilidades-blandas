@@ -81,6 +81,12 @@ button.chip.on{background:var(--brand);color:var(--brand-ink)}
 .mascot-img{display:grid;place-items:center;overflow:visible;line-height:0}
 .mascot-img img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(75,38,145,.18));user-select:none;-webkit-user-drag:none}
 .mascot-img .float{display:block;width:100%;height:100%;transform-box:fill-box;transform-origin:50% 100%}
+.cerebrito-eyes{position:absolute;inset:0;pointer-events:none;transform:translate(calc(var(--lx,0)*3px),calc(var(--ly,0)*2.5px));transition:transform .12s ease-out}
+.cerebrito-eye-glint{position:absolute;width:5.2%;height:7.2%;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 0 8px rgba(255,255,255,.7)}
+.cerebrito-eye-glint.left{left:47.8%;top:45.2%}
+.cerebrito-eye-glint.right{left:65.3%;top:44.2%}
+.mascot-img.blink .cerebrito-eyes{transform:translate(calc(var(--lx,0)*3px),calc(var(--ly,0)*2.5px)) scaleY(.08)}
+.mascot-img{position:relative}
 .mascot .halo{fill:var(--halo)}
 .mascot .b-dark{fill:#7355B5}
 .mascot .b-light{fill:#8767C6}
@@ -357,7 +363,7 @@ function mascot(size,mood,cls){
     sleep:'assets/cerebrito-feliz.png'
   };
   var src=moodMap[mood||'happy']||moodMap.happy;
-  return '<div class="mascot mascot-img'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" style="width:'+size+'px;height:'+h+'px" aria-hidden="true"><span class="float"><img src="'+src+'" width="'+size+'" height="'+h+'" alt=""></span></div>';
+  return '<div class="mascot mascot-img'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" style="width:'+size+'px;height:'+h+'px" aria-hidden="true"><span class="float"><img src="'+src+'" width="'+size+'" height="'+h+'" alt=""><span class="cerebrito-eyes"><i class="cerebrito-eye-glint left"></i><i class="cerebrito-eye-glint right"></i></span></span></div>';
 }
 function mrow(size,mood,text,cls,id){
   return '<div class="mrow"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(size,mood,cls)+'</button><div class="say"><span class="say-t"'+(id?' id="'+id+'"':'')+'>'+esc(text)+'</span></div></div>';
@@ -1006,6 +1012,18 @@ function blinkLoop(){
 }
 blinkLoop();
 function hop(svg){svg.classList.remove('hop');void svg.getBoundingClientRect();svg.classList.add('hop');setTimeout(function(){svg.classList.remove('hop');},700);}
+function greetMascots(){
+  mascots().forEach(function(m){
+    var img=m.querySelector('img');
+    if(!img)return;
+    var original=img.src;
+    img.src='assets/cerebrito-feliz.png';
+    hop(m);
+    setTimeout(function(){if(img.isConnected)img.src=original;},2400);
+  });
+}
+setTimeout(greetMascots,700);
+setInterval(greetMascots,12000);
 
 /* ---------- Acciones ---------- */
 var A={
