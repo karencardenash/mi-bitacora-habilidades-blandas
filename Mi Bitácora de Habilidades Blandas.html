@@ -350,12 +350,12 @@ var BODY='M32 104C30 66 66 40 108 40C150 40 176 62 174 96C172 132 140 160 98 160
 function mascot(size,mood,cls){
   var h=size;
   var moodMap={
-    happy:'assets/cerebrito-feliz.png',
-    cheer:'assets/cerebrito-medalla.png',
+    happy:'assets/cerebrito-1.png',
+    cheer:'assets/cerebrito-1.png',
     think:'assets/cerebrito-1.png',
     oops:'assets/cerebrito-1.png',
     wow:'assets/cerebrito-lupa.png',
-    sleep:'assets/cerebrito-feliz.png'
+    sleep:'assets/cerebrito-1.png'
   };
   var src=moodMap[mood||'happy']||moodMap.happy;
   return '<div class="mascot mascot-img'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" style="width:'+size+'px;height:'+h+'px" aria-hidden="true"><span class="float"><img src="'+src+'" width="'+size+'" height="'+h+'" alt=""></span></div>';
@@ -685,8 +685,8 @@ function skillRows(sc,prio){
 function viewOnboarding(){
   var s=ui.step;
   if(s==='welcome'){
-    return '<div class="hero mbox"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a Cerebrito"><img class="welcome-cerebrito" src="assets/cerebrito-saludo.gif?v=2" alt="Cerebrito saludando"></button>'+
-    '<div class="say up"><span class="say-t">¡Hola! Soy Cerebrito y voy a acompañarte en cada nivel.</span></div>'+
+    return '<div class="hero mbox"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(190,'happy','')+'</button>'+
+    '<div class="say up"><span class="say-t">¡Hola! Soy tu compañero de bitácora y voy a acompañarte en cada nivel.</span></div>'+
     '<h1 class="ttl">Mi Bitácora de <span class="grad">Habilidades Blandas</span></h1>'+
     '<p class="muted">Un nivel nuevo cada día para reforzar las habilidades que más necesitas en tu carrera.</p>'+
     '<div class="points"><div><span class="pi">'+ic('feedback',20)+'</span><span><b>Diagnóstico de 10 preguntas</b><br><span class="muted small">Descubre dónde tienes más espacio para crecer.</span></span></div>'+
