@@ -551,7 +551,7 @@ var WD3=['dom','lun','mar','mié','jue','vie','sáb'];
 
 /* ---------- Estado y almacenamiento ---------- */
 var KEY='mi-bitacora-habilidades-v2';
-var SHEETS_ENDPOINT='https://script.google.com/macros/s/AKfycbx_QsDhF8_ewxle6cWl8Vka7Xluimaqmipg8WtHUUarh6o2XNkIfvLVkUqmvHlggiwicA/exec';
+var SHEETS_ENDPOINT='https://script.google.com/macros/s/AKfycbzb84kzeyRzb_348-2wQZNnA-sPTk8Hd3Yf6q_fW-OiV3RrH3ttEqxYUEmDZrSYGAJfjw/exec';
 function fresh(){return {v:2,onboarded:false,name:'',email:'',program:'',semester:'',start:null,answers:[],scores:null,journey:[],done:{},xp:0,diary:[],demo:0,sessionId:'',notificationsAsked:false,notificationEnabled:false};}
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.v===2){var f=fresh();for(var k in o)f[k]=o[k];return f;}}}catch(e){}return fresh();}
 var state=load();
