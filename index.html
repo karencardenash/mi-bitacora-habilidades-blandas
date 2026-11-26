@@ -272,6 +272,10 @@ textarea:focus,input:focus,select:focus{outline:none;border-color:var(--brand-t)
 .confetti{position:absolute;top:0;width:9px;height:14px;border-radius:2px;opacity:0;animation:fall 2.6s ease-in infinite}
 @keyframes fall{0%{transform:translateY(-10px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(300px) rotate(360deg);opacity:0}}
 .confirm{background:var(--bad-soft);border-radius:16px;padding:14px;display:grid;gap:10px}
+.notify-modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(11,10,20,.72);backdrop-filter:blur(6px)}
+.notify-card{max-width:390px;width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:24px;padding:22px;display:grid;gap:14px;text-align:center;box-shadow:0 16px 50px rgba(0,0,0,.35)}
+.notify-card h2{font-size:1.35rem}
+.notify-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 #toasts{position:fixed;left:0;right:0;bottom:calc(92px + env(safe-area-inset-bottom,0px));display:grid;justify-items:center;gap:8px;z-index:60;pointer-events:none;padding:0 16px}
 .toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:8px 16px 8px 10px;border-radius:16px;font-weight:700;font-size:.9rem;max-width:420px}
@@ -548,7 +552,7 @@ var WD3=['dom','lun','mar','mié','jue','vie','sáb'];
 /* ---------- Estado y almacenamiento ---------- */
 var KEY='mi-bitacora-habilidades-v2';
 var SHEETS_ENDPOINT='https://script.google.com/macros/s/AKfycbx_QsDhF8_ewxle6cWl8Vka7Xluimaqmipg8WtHUUarh6o2XNkIfvLVkUqmvHlggiwicA/exec';
-function fresh(){return {v:2,onboarded:false,name:'',program:'',semester:'',start:null,answers:[],scores:null,journey:[],done:{},xp:0,diary:[],demo:0,sessionId:''};}
+function fresh(){return {v:2,onboarded:false,name:'',email:'',program:'',semester:'',start:null,answers:[],scores:null,journey:[],done:{},xp:0,diary:[],demo:0,sessionId:'',notificationsAsked:false,notificationEnabled:false};}
 function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.v===2){var f=fresh();for(var k in o)f[k]=o[k];return f;}}}catch(e){}return fresh();}
 var state=load();
 function save(){if(!state.sessionId)state.sessionId=uid();try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
@@ -560,6 +564,7 @@ function sendSheetEvent(event,details){
     timestamp:new Date().toISOString(),
     event:event,
     name:state.name||'',
+    email:state.email||'',
     program:state.program||'',
     semester:state.semester||'',
     xp:state.xp||0,
@@ -581,7 +586,7 @@ function sendSheetEvent(event,details){
   }catch(e){}
 }
 
-var ui={view:'ruta',step:'welcome',q:0,ans:[],scores:null,reg:{name:state.name||'',program:state.program||'',sem:state.semester||'3'},lesson:null,cal:null,diaryOpen:false,draft:{mood:'',skill:'',text:''},filter:'todas',confirm:null,delId:null};
+var ui={view:'ruta',step:'welcome',q:0,ans:[],scores:null,reg:{name:state.name||'',email:state.email||'',program:state.program||'',sem:state.semester||'3'},lesson:null,cal:null,diaryOpen:false,draft:{mood:'',skill:'',text:''},filter:'todas',confirm:null,delId:null};
 
 /* ---------- Utilidades ---------- */
 function $(s,r){return (r||document).querySelector(s);}
@@ -599,6 +604,50 @@ function pick(a){return a[Math.floor(Math.random()*a.length)];}
 function untilTomorrow(){var n=new Date();var t=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);var m=Math.max(0,Math.floor((t-n)/60000));return Math.floor(m/60)+' h '+(m%60)+' min';}
 function toast(msg){var t=document.createElement('div');t.className='toast';t.innerHTML=mascot(30,'cheer','')+'<span></span>';t.lastChild.textContent=msg;$('#toasts').appendChild(t);setTimeout(function(){t.remove();},2400);}
 function first(){return state.name.trim().split(/\s+/)[0]||'';}
+function showNotificationPrompt(){
+  if(!('Notification' in window)||state.notificationsAsked||Notification.permission==='denied'||document.querySelector('.notify-modal'))return;
+  var modal=document.createElement('div');
+  modal.className='notify-modal';
+  modal.innerHTML='<div class="notify-card">'+mascot(76,'cheer','')+'<h2>¿Activamos tu racha?</h2><p class="muted">Activa recordatorios divertidos para que no se te pase el siguiente nivel.</p><div class="notify-actions"><button class="btn" data-act="notify-later">Ahora no</button><button class="btn primary" data-act="notify-allow">Activar</button></div></div>';
+  document.body.appendChild(modal);
+}
+function closeNotificationPrompt(){
+  var modal=document.querySelector('.notify-modal');
+  if(modal)modal.remove();
+}
+function requestNotifications(){
+  closeNotificationPrompt();
+  state.notificationsAsked=true;
+  if(!('Notification' in window)){save();return;}
+  Notification.requestPermission().then(function(permission){
+    state.notificationEnabled=permission==='granted';
+    save();
+    if(permission==='granted'){
+      new Notification('¡Tu racha te espera!',{body:'Activa el siguiente nivel y sigue creciendo. 💪',tag:'mi-bitacora-streak'});
+      startNotificationReminders();
+      toast('Recordatorios activados');
+    }else{
+      toast('Puedes activarlos después desde tu navegador');
+    }
+  }).catch(function(){save();});
+}
+function startNotificationReminders(){
+  if(!state.notificationEnabled||!('Notification' in window)||Notification.permission!=='granted'||!state.onboarded)return;
+  function checkReminder(){
+    var now=new Date();
+    var key='mi-bitacora-notified-'+today();
+    var activity=activitySet();
+    var completedToday=!!activity[today()];
+    if(!completedToday&&now.getHours()>=18&&localStorage.getItem(key)!=='1'){
+      var lessonIndex=dayIdx();
+      var title=lessonIndex>=0&&lessonIndex<state.journey.length?'Tu próximo nivel: '+lessonOf(lessonIndex).t:'¡Es hora de cuidar tu racha!';
+      new Notification(title,{body:'Tu mascota te recuerda: activa tu nivel y suma una nueva habilidad. ¡Vamos!',tag:'mi-bitacora-daily'});
+      localStorage.setItem(key,'1');
+    }
+  }
+  checkReminder();
+  setInterval(checkReminder,60*60*1000);
+}
 
 function dayIdx(){return diffDays(state.start,today());}
 function pctOf(s){return Math.round(state.scores[s]/5*100);}
@@ -627,6 +676,12 @@ function lessonOf(i){var j=state.journey[i];return LESSONS[j.s][j.l];}
 
 /* ---------- Onboarding ---------- */
 function regSay(){var n=ui.reg.name.trim();return n.length>=2?'Mucho gusto, '+n.split(/\s+/)[0]+'. ¿Qué estudias?':'¿Cómo te llamas y qué estudias?';}
+function updateRegistrationButton(){
+  var b=$('#btn-reg');
+  if(b)b.disabled=!(ui.reg.name.trim().length>=2&&ui.reg.program&&/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ui.reg.email||''));
+  var sy=$('#say-reg');
+  if(sy)sy.textContent=regSay();
+}
 function skillRows(sc,prio){
   return sortedSkills(sc).map(function(s){return s;});
 }
@@ -643,10 +698,11 @@ function viewOnboarding(){
     '<button class="btn primary big" data-act="ob-start">Empezar</button></div>';
   }
   if(s==='reg'){
-    var ok=ui.reg.name.trim().length>=2&&ui.reg.program;
-    var sems='';for(var i=1;i<=10;i++)sems+='<option value="'+i+'"'+(String(ui.reg.sem)===String(i)?' selected':'')+'>'+i+'.º semestre</option>';
+    var ok=ui.reg.name.trim().length>=2&&ui.reg.program&&/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(ui.reg.email||'');
+    var sems='';for(var i=1;i<=9;i++)sems+='<option value="'+i+'"'+(String(ui.reg.sem)===String(i)?' selected':'')+'>'+i+'.º semestre</option>';
     return '<div class="stack" style="padding-top:2vh">'+mrow(92,'happy',regSay(),'','say-reg')+
     '<div class="field"><label for="f-name">Tu nombre</label><input id="f-name" type="text" autocomplete="given-name" maxlength="40" value="'+esc(ui.reg.name)+'" placeholder="Tu nombre"></div>'+
+    '<div class="field"><label for="f-email">Correo electrónico</label><input id="f-email" type="email" autocomplete="email" maxlength="120" value="'+esc(ui.reg.email||'')+'" placeholder="tu.correo@ejemplo.com"></div>'+
     '<div class="field"><label>Tu programa</label><div class="choice-cards">'+PROGRAMS.map(function(p){return '<button class="pc'+(ui.reg.program===p?' on':'')+'" data-act="prog" data-p="'+esc(p)+'">'+esc(p)+'</button>';}).join('')+'</div></div>'+
     '<div class="field"><label for="f-sem">Semestre</label><select id="f-sem">'+sems+'</select></div>'+
     '<button id="btn-reg" class="btn primary big" data-act="reg-next"'+(ok?'':' disabled')+'>Continuar</button></div>';
@@ -809,7 +865,7 @@ function viewPerfil(){
     sk.map(function(x){var b=pctOf(x.id),cp=curPct(x.id),tot=state.journey.filter(function(j){return j.s===x.id;}).length;return '<div class="skrow" style="--c:'+x.c+'"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span class="row" style="flex-wrap:nowrap;min-width:0"><span class="sk-dot">'+ic(x.id,15)+'</span><b>'+esc(x.name)+'</b></span>'+(prio[x.id]?'<span class="chip prio">Prioridad</span>':'')+'</div><div class="track"><i class="base" style="width:'+b+'%"></i><i class="now" style="width:'+cp+'%"></i></div><span class="muted small">Inicio '+b+'% · ahora '+cp+'% (estimado) · '+doneOfSkill(x.id)+' de '+tot+' niveles</span></div>';}).join('')+'</div>';
   }).join('');
   var bd=badges().map(function(b){return '<div class="badge'+(b.on?' on':'')+'"><b>'+esc(b.n)+'</b><span>'+esc(b.d)+'</span></div>';}).join('');
-  var sems='';for(var i=1;i<=10;i++)sems+='<option value="'+i+'"'+(String(state.semester)===String(i)?' selected':'')+'>'+i+'.º semestre</option>';
+  var sems='';for(var i=1;i<=9;i++)sems+='<option value="'+i+'"'+(String(state.semester)===String(i)?' selected':'')+'>'+i+'.º semestre</option>';
   var progs=PROGRAMS.map(function(p){return '<option'+(state.program===p?' selected':'')+'>'+esc(p)+'</option>';}).join('');
   function cf(name,txt,btn){return ui.confirm===name?'<div class="confirm"><span>'+txt+'</span><div class="row"><button class="btn danger sm" data-act="'+name+'-yes">'+btn+'</button><button class="btn sm" data-act="conf-no">Cancelar</button></div></div>':'';}
   return '<div class="top"><h1>Perfil</h1></div><div class="stack">'+mrow(104,pm,pt)+
@@ -819,6 +875,7 @@ function viewPerfil(){
   '<div class="card"><h2 style="font-size:1.2rem;margin-bottom:12px">Insignias</h2><div class="badges">'+bd+'</div></div>'+
   '<div class="card stack"><h2 style="font-size:1.2rem">Ajustes</h2>'+
   '<div class="field"><label for="e-name">Nombre</label><input id="e-name" type="text" maxlength="40" value="'+esc(state.name)+'"></div>'+
+  '<div class="field"><label for="e-email">Correo electrónico</label><input id="e-email" type="email" maxlength="120" value="'+esc(state.email||'')+'" placeholder="tu.correo@ejemplo.com"></div>'+
   '<div class="field"><label for="e-prog">Programa</label><select id="e-prog">'+progs+'</select></div>'+
   '<div class="field"><label for="e-sem">Semestre</label><select id="e-sem">'+sems+'</select></div>'+
   '<button class="btn primary" data-act="edit-save">Guardar cambios</button>'+
@@ -956,14 +1013,16 @@ function hop(svg){svg.classList.remove('hop');void svg.getBoundingClientRect();s
 
 /* ---------- Acciones ---------- */
 var A={
+ 'notify-allow':function(){requestNotifications();},
+ 'notify-later':function(){state.notificationsAsked=true;save();closeNotificationPrompt();},
  'mtap':function(d,e,t){
   var svg=t.querySelector('svg');if(svg)hop(svg);
   var box=t.closest('.mrow,.mbox,.sum'),st=box&&box.querySelector('.say-t');
   if(st)st.textContent=pick(TAPS);
  },
  'ob-start':function(){ui.step='reg';render();},
- 'prog':function(d){ui.reg.program=d.p;render();},
- 'reg-next':function(){ui.reg.name=$('#f-name').value;ui.reg.sem=$('#f-sem').value;ui.step='diag';ui.q=0;ui.ans=[];render();},
+ 'prog':function(d){ui.reg.program=d.p;render();setTimeout(updateRegistrationButton,0);},
+ 'reg-next':function(){ui.reg.name=$('#f-name').value;ui.reg.email=$('#f-email').value.trim();ui.reg.sem=$('#f-sem').value;ui.step='diag';ui.q=0;ui.ans=[];render();},
  'diag-back':function(){if(ui.q>0){ui.q--;}else{ui.step='reg';}render();},
  'ans':function(d){
   ui.ans[ui.q]=+d.v;
@@ -972,10 +1031,10 @@ var A={
   render();window.scrollTo(0,0);
  },
  'ob-finish':function(){
-  state.name=ui.reg.name.trim();state.program=ui.reg.program;state.semester=String(ui.reg.sem);
+  state.name=ui.reg.name.trim();state.email=ui.reg.email.trim();state.program=ui.reg.program;state.semester=String(ui.reg.sem);
   state.answers=ui.ans.slice();state.scores=ui.scores;state.journey=buildJourney(ui.scores);
   state.start=ymd(new Date());state.demo=0;state.done={};state.xp=0;state.onboarded=true;
-  save();sendSheetEvent('diagnostico_completado',{answers:state.answers,scores:state.scores,journey:state.journey.map(function(j){return j.s;})});ui.view='ruta';ui.cal=null;ui.confirm=null;render();window.scrollTo(0,0);
+  save();sendSheetEvent('diagnostico_completado',{answers:state.answers,scores:state.scores,journey:state.journey.map(function(j){return j.s;})});ui.view='ruta';ui.cal=null;ui.confirm=null;render();window.scrollTo(0,0);setTimeout(showNotificationPrompt,500);
  },
  'nav':function(d){ui.view=d.v;ui.confirm=null;ui.delId=null;render();window.scrollTo(0,0);},
  'open':function(d){
@@ -1049,10 +1108,11 @@ var A={
  /* perfil */
  'edit-save':function(){
   var n=$('#e-name').value.trim();if(n.length<2){toast('Escribe tu nombre');return;}
-  state.name=n;state.program=$('#e-prog').value;state.semester=$('#e-sem').value;save();sendSheetEvent('perfil_actualizado',{name:n,program:state.program,semester:state.semester});render();toast('Cambios guardados');
+  var em=$('#e-email').value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast('Escribe un correo válido');return;}
+  state.name=n;state.email=em;state.program=$('#e-prog').value;state.semester=$('#e-sem').value;save();sendSheetEvent('perfil_actualizado',{name:n,email:em,program:state.program,semester:state.semester});render();toast('Cambios guardados');
  },
  'retake':function(){ui.confirm='retake';render();},
- 'retake-yes':function(){ui.reg={name:state.name,program:state.program,sem:state.semester||'3'};state.onboarded=false;state.done={};state.xp=0;save();ui.confirm=null;ui.step='diag';ui.q=0;ui.ans=[];render();window.scrollTo(0,0);},
+ 'retake-yes':function(){ui.reg={name:state.name,email:state.email||'',program:state.program,sem:state.semester||'3'};state.onboarded=false;state.done={};state.xp=0;save();ui.confirm=null;ui.step='diag';ui.q=0;ui.ans=[];render();window.scrollTo(0,0);},
  'wipe':function(){ui.confirm='wipe';render();},
  'wipe-yes':function(){state=fresh();save();ui.reg={name:'',program:'',sem:'3'};ui.step='welcome';ui.view='ruta';ui.cal=null;ui.confirm=null;ui.diaryOpen=false;render();window.scrollTo(0,0);},
  'conf-no':function(){ui.confirm=null;render();},
@@ -1066,7 +1126,8 @@ document.addEventListener('click',function(e){
 });
 document.addEventListener('input',function(e){
   var id=e.target.id,v=e.target.value;
-  if(id==='f-name'){ui.reg.name=v;var b=$('#btn-reg');if(b)b.disabled=!(v.trim().length>=2&&ui.reg.program);var sy=$('#say-reg');if(sy)sy.textContent=regSay();}
+  if(id==='f-name'){ui.reg.name=v;updateRegistrationButton();}
+  else if(id==='f-email'){ui.reg.email=v.trim();updateRegistrationButton();}
   else if(id==='diary-text'){ui.draft.text=v;var b2=$('#btn-diary');if(b2)b2.disabled=v.trim().length<3;}
   else if(id==='ref-text'&&ui.lesson){ui.lesson.p.text=v;var b3=$('#btn-ref');if(b3)b3.disabled=v.trim().length<8;}
 });
@@ -1075,6 +1136,7 @@ document.addEventListener('change',function(e){
 });
 
 render();
+setTimeout(function(){if(state.onboarded)startNotificationReminders();},800);
 })();
 </script>
 

@@ -25,9 +25,14 @@ function doPost(request) {
   ];
 
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow(baseHeaders.concat(skillHeaders));
-  } else if (sheet.getRange(1, 18, 1, 10).getValues()[0].every(function(value) { return value === ''; })) {
-    sheet.getRange(1, 18, 1, 10).setValues([skillHeaders]);
+    sheet.appendRow(baseHeaders.concat(skillHeaders).concat(['Correo electronico']));
+  } else {
+    if (sheet.getRange(1, 18, 1, 10).getValues()[0].every(function(value) { return value === ''; })) {
+      sheet.getRange(1, 18, 1, 10).setValues([skillHeaders]);
+    }
+    if (sheet.getRange(1, 28).getValue() === '') {
+      sheet.getRange(1, 28).setValue('Correo electronico');
+    }
   }
 
   var data = JSON.parse(request.postData.contents);
@@ -56,8 +61,7 @@ function doPost(request) {
     data.userAgent || '',
     data.page || '',
     JSON.stringify(details)
-  ].concat(skillValues));
-  ]);
+  ].concat(skillValues).concat([data.email || '']));
 
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
