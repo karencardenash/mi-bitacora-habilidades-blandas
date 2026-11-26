@@ -5,30 +5,38 @@ function doPost(request) {
     sheet = spreadsheet.insertSheet('Respuestas');
   }
 
+  var skillHeaders = [
+    'Porcentaje: Comunicación de ideas',
+    'Porcentaje: Gestión del tiempo',
+    'Porcentaje: Adaptabilidad y presión',
+    'Porcentaje: Trabajo en equipo',
+    'Porcentaje: Pensamiento crítico y creativo',
+    'Porcentaje: Recibir y dar feedback',
+    'Porcentaje: Empatía y escucha',
+    'Porcentaje: Toma de decisiones',
+    'Porcentaje: Confianza y motivación',
+    'Porcentaje: Networking y marca personal'
+  ];
+  var baseHeaders = [
+    'Fecha y hora', 'ID de sesion', 'Evento', 'Nombre', 'Programa', 'Semestre',
+    'XP', 'Niveles completados', 'Habilidad', 'Pregunta', 'Respuesta',
+    'Estado de animo', 'Puntajes', 'Diagnostico', 'Dispositivo o navegador',
+    'Pagina', 'Detalles'
+  ];
+
   if (sheet.getLastRow() === 0) {
-    sheet.appendRow([
-      'Fecha y hora',
-      'ID de sesion',
-      'Evento',
-      'Nombre',
-      'Programa',
-      'Semestre',
-      'XP',
-      'Niveles completados',
-      'Habilidad',
-      'Pregunta',
-      'Respuesta',
-      'Estado de animo',
-      'Puntajes',
-      'Diagnostico',
-      'Dispositivo o navegador',
-      'Pagina',
-      'Detalles'
-    ]);
+    sheet.appendRow(baseHeaders.concat(skillHeaders));
+  } else if (sheet.getRange(1, 18, 1, 10).getValues()[0].every(function(value) { return value === ''; })) {
+    sheet.getRange(1, 18, 1, 10).setValues([skillHeaders]);
   }
 
   var data = JSON.parse(request.postData.contents);
   var details = data.details || {};
+  var percentages = data.skillPercentages || {};
+  var skillIds = ['com', 'tiempo', 'adapt', 'equipo', 'critico', 'feedback', 'empatia', 'decis', 'conf', 'marca'];
+  var skillValues = skillIds.map(function(id) {
+    return percentages[id] === undefined ? '' : Number(percentages[id]) + '%';
+  });
 
   sheet.appendRow([
     data.timestamp || new Date().toISOString(),
@@ -48,6 +56,7 @@ function doPost(request) {
     data.userAgent || '',
     data.page || '',
     JSON.stringify(details)
+  ].concat(skillValues));
   ]);
 
   return ContentService
