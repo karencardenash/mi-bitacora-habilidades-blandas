@@ -1,0 +1,1072 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Mi Bitácora de Habilidades Blandas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: columna de app móvil (máx. 520px) con navegación fija abajo; la mascota acompaña cada pantalla y las lecciones abren a pantalla completa. */
+:root{
+  --bg:#0B0A14; --surface:#15132A; --surface2:#1D1A38; --ink:#F2F0FB; --muted:#A09DBC; --line:#2D2A4D;
+  --brand:#7B52C9; --brand-deep:#58348F; --brand-ink:#FFFFFF; --brand-t:#B9A0FF; --brand-soft:#241C47;
+  --hero-a:#7A45D6; --hero-b:#4A5CD8;
+  --g1:#A23BFF; --g2:#5E7BFF; --g3:#00D9FF;
+  --halo:rgba(135,103,198,.18); --grid:rgba(255,255,255,.04);
+  --int:#0F8FB3; --int-t:#4DD8FF; --cog:#7C4FD6; --cog-t:#BBA2FF; --emo:#D13F87; --emo-t:#FF86BC;
+  --xp:#FFC24D; --hot:#FF8A4C;
+  --good:#3EE08A; --good-f:#16A058; --good-soft:#10301F; --bad:#FF7A70; --bad-soft:#3A1C22;
+  --font-d:'Outfit','Segoe UI',system-ui,sans-serif;
+  --font-b:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F8F1E7; --surface:#FFFCF7; --surface2:#F1E8DA; --ink:#1B1633; --muted:#675F80; --line:#E4D8C5;
+    --brand-t:#6240B0; --brand-soft:#ECE4F8;
+    --g1:#7B2FD6; --g2:#3F5FE0; --g3:#0690B5;
+    --halo:rgba(135,103,198,.16); --grid:rgba(27,22,51,.05);
+    --int-t:#0A7491; --cog-t:#6240B0; --emo-t:#B02A6E;
+    --xp:#B87800; --hot:#D9560E;
+    --good:#12803F; --good-soft:#DCF3E4; --bad:#C23A32; --bad-soft:#FBE3E0;
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F8F1E7; --surface:#FFFCF7; --surface2:#F1E8DA; --ink:#1B1633; --muted:#675F80; --line:#E4D8C5;
+  --brand-t:#6240B0; --brand-soft:#ECE4F8;
+  --g1:#7B2FD6; --g2:#3F5FE0; --g3:#0690B5;
+  --halo:rgba(135,103,198,.16); --grid:rgba(27,22,51,.05);
+  --int-t:#0A7491; --cog-t:#6240B0; --emo-t:#B02A6E;
+  --xp:#B87800; --hot:#D9560E;
+  --good:#12803F; --good-soft:#DCF3E4; --bad:#C23A32; --bad-soft:#FBE3E0;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-b); font-size:16px; line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0;
+}
+body.lock{overflow:hidden}
+h1,h2,h3{font-family:var(--font-d);margin:0;line-height:1.12;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--g3);outline-offset:2px}
+.app{max-width:520px;margin:0 auto;padding-block:18px calc(104px + env(safe-area-inset-bottom,0px));min-width:0}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+.label{font-size:.72rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+svg{display:block;flex:none}
+.grad{background:linear-gradient(90deg,var(--g1),var(--g2),var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.num{font-variant-numeric:tabular-nums;font-weight:700}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;padding:12px 18px;font-weight:700;background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 2px var(--line);min-height:46px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--brand);color:var(--brand-ink);box-shadow:0 4px 0 var(--brand-deep)}
+.btn.primary:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--brand-deep)}
+.btn.big{width:100%;padding:15px 18px;font-size:1.05rem;letter-spacing:.02em}
+.btn.danger{background:var(--bad);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+.btn.sm{padding:8px 12px;min-height:38px;font-size:.9rem;border-radius:12px}
+.icon-btn{border:0;background:transparent;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
+.icon-btn:hover{background:var(--line)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stack{display:grid;gap:14px}
+.card{background:var(--surface);border-radius:20px;padding:18px;box-shadow:0 0 0 1.5px var(--line)}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 11px;font-size:.82rem;font-weight:700;background:var(--brand-soft);color:var(--brand-t);border:0}
+button.chip{cursor:pointer}
+button.chip.on{background:var(--brand);color:var(--brand-ink)}
+.chip.prio{background:var(--bad-soft);color:var(--bad)}
+
+/* Mascota */
+.mascot{display:block;overflow:visible;flex:none;max-width:100%;height:auto}
+.mascot .halo{fill:var(--halo)}
+.mascot .b-dark{fill:#7355B5}
+.mascot .b-light{fill:#8767C6}
+.mascot .sclera{fill:#fff}
+.mascot .pupil{fill:#173B4B;transition:transform .12s ease-out;transform:translate(calc(var(--lx,0)*3px),calc(var(--ly,0)*2.5px))}
+.mascot .eye{transform-box:fill-box;transform-origin:50% 50%;transition:transform .07s}
+.mascot.blink .eye{transform:scaleY(.08)}
+.mascot .lid,.mascot .mouth{fill:none;stroke:#173B4B;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.mascot .lid,.mascot .mouth,.mascot .spark,.mascot .zzz{display:none}
+.mascot .m-cheer,.mascot .m-wow{fill:#173B4B}
+.mascot[data-mood="happy"] .m-happy,.mascot[data-mood="cheer"] .m-cheer,.mascot[data-mood="oops"] .m-oops,
+.mascot[data-mood="think"] .m-think,.mascot[data-mood="wow"] .m-wow,.mascot[data-mood="sleep"] .m-sleep{display:inline}
+.mascot[data-mood="cheer"] .spark,.mascot[data-mood="sleep"] .zzz{display:inline}
+.mascot[data-mood="sleep"] .sclera,.mascot[data-mood="sleep"] .pupil{display:none}
+.mascot[data-mood="sleep"] .lid{display:inline}
+.mascot[data-mood="think"] .pupil{transform:translate(2.5px,-3px)}
+.mascot[data-mood="oops"] .pupil{transform:translate(0,3px)}
+.mascot[data-mood="wow"] .sclera{transform-box:fill-box;transform-origin:center;transform:scale(1.15)}
+.mascot .spark path{fill:var(--xp);transform-box:fill-box;transform-origin:center;animation:tw 1.3s ease-in-out infinite}
+.mascot .spark g:nth-child(2) path{animation-delay:.4s}.mascot .spark g:nth-child(3) path{animation-delay:.8s}
+.mascot .zzz{fill:var(--brand-t);font:800 20px var(--font-d);animation:zz 2.6s ease-in-out infinite}
+.mascot .zzz.z2{animation-delay:1.1s;font-size:15px}
+.mascot .float{transform-box:fill-box;transform-origin:50% 100%;animation:bob 3.6s ease-in-out infinite}
+.mascot[data-mood="sleep"] .float{animation-duration:6s}
+.mascot[data-mood="cheer"] .float{animation:cheer .9s ease-in-out infinite}
+.mascot.hop .float{animation:hop .62s ease-out 1}
+.mascot.shake .float{animation:shake .5s ease-in-out 1}
+@keyframes bob{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-3px) scale(.985,1.02)}}
+@keyframes cheer{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-9px) scale(.97,1.05)}}
+@keyframes hop{0%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-24px) scale(.95,1.07)}60%{transform:translateY(0) scale(1.07,.92)}100%{transform:translateY(0) scale(1,1)}}
+@keyframes shake{0%,100%{transform:translateX(0) rotate(0)}20%{transform:translateX(-7px) rotate(-3deg)}40%{transform:translateX(7px) rotate(3deg)}60%{transform:translateX(-5px) rotate(-2deg)}80%{transform:translateX(4px) rotate(1deg)}}
+@keyframes tw{0%,100%{transform:scale(.5);opacity:.5}50%{transform:scale(1.15);opacity:1}}
+@keyframes zz{0%{opacity:0;transform:translateY(8px)}40%{opacity:1}100%{opacity:0;transform:translateY(-12px)}}
+@keyframes pop{0%{opacity:0;transform:scale(.94)}100%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){
+  .mascot .float,.mascot[data-mood="cheer"] .float,.mascot.hop .float,.mascot.shake .float,.mascot .spark path,.mascot .zzz,.say,.node.today::after{animation:none}
+  .confetti{display:none}
+}
+.mbtn{border:0;background:transparent;padding:0;border-radius:24px;flex:none;line-height:0}
+.mrow{display:flex;align-items:center;gap:12px}
+.mbox{display:grid;justify-items:center;gap:14px}
+.say{position:relative;flex:1;min-width:0;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:12px 14px;font-weight:600;line-height:1.35;animation:pop .25s ease-out}
+.say::before{content:"";position:absolute;left:-8px;top:50%;width:13px;height:13px;background:var(--surface);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:translateY(-50%) rotate(45deg)}
+.say.up{flex:none;text-align:center}
+.say.up::before{left:50%;top:-8px;border:0;border-top:2px solid var(--line);border-left:2px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+
+/* Cabecera */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.top h1{font-size:1.6rem}
+.stats{display:flex;gap:8px}
+.stat{display:flex;align-items:center;gap:5px;font-weight:700;padding:7px 11px;border-radius:999px;background:var(--surface);box-shadow:0 0 0 1.5px var(--line);font-variant-numeric:tabular-nums}
+.stat.hot{color:var(--hot)} .stat.xp{color:var(--xp)}
+
+/* Tarjeta de hoy */
+.today{background:linear-gradient(135deg,var(--hero-a),var(--hero-b));color:#fff;border-radius:24px;padding:20px;display:grid;gap:12px;box-shadow:0 5px 0 var(--brand-deep)}
+.today .label{color:inherit;opacity:.85}
+.today h2{font-size:1.5rem}
+.today .btn{background:#fff;color:#4A3A9A;box-shadow:0 4px 0 rgba(0,0,0,.25);width:100%;font-size:1.02rem}
+.today.rest{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1.5px var(--line)}
+.today.rest .label{color:var(--muted)}
+.today.rest .btn{background:var(--brand);color:var(--brand-ink)}
+.prios{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+
+/* Ruta */
+.path{display:grid;gap:30px;margin-top:26px}
+.step{display:flex;align-items:center;gap:14px;padding-left:calc(40px + var(--off,0px));min-width:0}
+.nodew{position:relative;flex:none}
+.node{position:relative;width:76px;height:76px;border-radius:50%;border:0;display:grid;place-items:center;color:#fff;background:var(--c);box-shadow:0 6px 0 rgba(0,0,0,.28)}
+.node:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(0,0,0,.28)}
+.node.done{background:var(--good-f)}
+.node.locked{background:var(--surface2);color:var(--muted);box-shadow:0 6px 0 rgba(0,0,0,.12)}
+.node.today::after{content:"";position:absolute;inset:-9px;border-radius:50%;border:3px solid var(--c);animation:ring 1.8s ease-out infinite}
+@keyframes ring{0%{transform:scale(.88);opacity:.9}100%{transform:scale(1.12);opacity:0}}
+.sitter{position:absolute;left:44px;top:-46px;width:62px;z-index:2;pointer-events:none}
+.step-t{display:grid;gap:2px;min-width:0}
+.step-t b{font-size:.98rem;line-height:1.25}
+.step-t span{font-size:.82rem;color:var(--muted)}
+.step-t .late{color:var(--hot);font-weight:700}
+
+/* Diario */
+.moods{display:flex;gap:8px;flex-wrap:wrap}
+textarea,input[type=text],select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+textarea{resize:vertical;min-height:130px;line-height:1.5}
+textarea:focus,input:focus,select:focus{outline:none;border-color:var(--brand-t)}
+.entry{display:grid;gap:8px}
+.entry .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}
+.entry .q{font-weight:700;font-size:.92rem}
+.entry .t{white-space:pre-wrap;overflow-wrap:anywhere}
+.sk-dot{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--c);color:#fff;flex:none}
+
+/* Calendario */
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-head h2{font-size:1.25rem;text-transform:capitalize}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.cal-grid .wd{text-align:center;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;padding-bottom:4px}
+.cd{position:relative;aspect-ratio:1;border-radius:12px;border:0;background:var(--surface);box-shadow:inset 0 0 0 1.5px var(--line);display:grid;place-items:center;font-weight:500;font-variant-numeric:tabular-nums;padding:0;color:var(--ink)}
+.cd.empty{background:transparent;box-shadow:none}
+.cd span{grid-area:1/1;align-self:start;margin-top:5px;font-size:.88rem}
+.cd svg{grid-area:1/1;align-self:end;margin-bottom:4px}
+.cd.done{background:var(--good-soft);color:var(--good);box-shadow:inset 0 0 0 1.5px var(--good)}
+.cd.open{background:var(--brand-soft);box-shadow:inset 0 0 0 2px var(--brand-t)}
+.cd.locked{color:var(--muted);background:transparent}
+.cd.today{outline:3px solid var(--xp);outline-offset:1px}
+.cd.sel{background:var(--ink);color:var(--bg);box-shadow:none}
+.dd{position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--hot)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:12px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+
+/* Perfil y categorías */
+.avatar{width:72px;height:72px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;font-family:var(--font-d);font-weight:800;font-size:1.7rem;flex:none}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpi{background:var(--bg);border-radius:14px;padding:12px}
+.kpi b{display:block;font-family:var(--font-d);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.cat-h{display:grid;gap:6px;margin-bottom:4px}
+.cat-t{color:var(--ct);font-family:var(--font-d);font-size:1.1rem}
+.skrow{display:grid;gap:6px;padding:10px 0;border-top:1.5px solid var(--line)}
+.track{position:relative;height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.track i{position:absolute;left:0;top:0;bottom:0;border-radius:99px}
+.track .base{background:color-mix(in srgb,var(--c) 40%,var(--line))}
+.track .now{background:var(--c)}
+.badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.badge{border-radius:16px;padding:12px;background:var(--bg);display:grid;gap:3px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.badge.on{background:var(--brand-soft);box-shadow:inset 0 0 0 2px var(--brand-t)}
+.badge:not(.on){opacity:.6}
+.badge b{font-size:.92rem}
+.badge span{font-size:.78rem;color:var(--muted)}
+.field{display:grid;gap:6px}
+.field label{font-weight:700;font-size:.88rem}
+
+/* Navegación inferior */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1.5px solid var(--line);padding:6px max(10px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
+.nav-in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.nav button{border:0;background:transparent;display:grid;justify-items:center;gap:2px;padding:7px 4px;border-radius:14px;color:var(--muted);font-size:.74rem;font-weight:700}
+.nav button.on{color:var(--brand-t);background:var(--brand-soft)}
+
+/* Onboarding */
+.hero{position:relative;isolation:isolate;display:grid;justify-items:center;gap:16px;text-align:center;padding-top:4vh}
+.hero::before{content:"";position:absolute;z-index:-1;inset:-18px -16px auto;height:380px;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:34px 34px;-webkit-mask-image:linear-gradient(#000,transparent);mask-image:linear-gradient(#000,transparent)}
+.ttl{font-size:2.35rem;font-weight:800}
+.points{display:grid;gap:12px;margin:4px 0;text-align:left;width:100%}
+.points div{display:flex;gap:12px;align-items:center}
+.points .pi{width:38px;height:38px;border-radius:12px;background:var(--brand-soft);color:var(--brand-t);display:grid;place-items:center;flex:none}
+.progress{height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--g1),var(--g2));border-radius:99px;transition:width .3s}
+.choice-cards{display:grid;gap:10px}
+.pc{border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:14px 16px;text-align:left;font-weight:700}
+.pc.on{border-color:var(--brand-t);background:var(--brand-soft)}
+.ans{display:grid;gap:10px}
+.ans button{border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:13px 16px;text-align:left;font-weight:700;box-shadow:0 3px 0 var(--line)}
+.ans button:active{transform:translateY(2px);box-shadow:0 1px 0 var(--line)}
+.ans button.on{border-color:var(--brand-t);background:var(--brand-soft)}
+.qtext{font-family:var(--font-d);font-size:1.4rem;line-height:1.25;font-weight:700}
+
+/* Lección */
+.overlay{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.overlay[hidden]{display:none}
+.ls-head{display:flex;align-items:center;gap:8px;max-width:560px;width:100%;margin:0 auto;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+.ls-head .progress{flex:1}
+.ls-body{flex:1;overflow-y:auto;max-width:560px;width:100%;margin:0 auto;padding:18px 0;display:grid;gap:16px;align-content:start}
+.ls-kind{font-size:.74rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.ls-q{font-size:1.4rem}
+.opts{display:grid;gap:10px}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:14px 16px;text-align:left;font-weight:500;box-shadow:0 3px 0 var(--line);line-height:1.35}
+.opt.on{border-color:var(--brand-t);background:var(--brand-soft);box-shadow:0 3px 0 var(--brand)}
+.opt.right{border-color:var(--good);background:var(--good-soft);box-shadow:0 3px 0 var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft);box-shadow:0 3px 0 var(--bad)}
+.slots{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:s}
+.slots li{counter-increment:s;display:flex;align-items:center;gap:10px;min-height:52px}
+.slots li::before{content:counter(s);width:26px;height:26px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-size:.8rem;font-weight:700;flex:none}
+.slot-empty{flex:1;border:2px dashed var(--line);border-radius:14px;min-height:52px}
+.chipx{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 14px;font-weight:500;text-align:left;box-shadow:0 3px 0 var(--line);line-height:1.3}
+.slots .chipx{flex:1}
+.chipx.right{border-color:var(--good);background:var(--good-soft)}
+.chipx.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.bank{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px;border-top:1.5px solid var(--line)}
+.mt{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcol{display:grid;gap:10px;align-content:start}
+.mi{border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:12px;text-align:left;font-size:.92rem;line-height:1.3;box-shadow:0 3px 0 var(--line);min-height:62px}
+.mi.on{border-color:var(--brand-t);background:var(--brand-soft)}
+.mi.ok{border-color:var(--good);background:var(--good-soft);box-shadow:none;opacity:.8}
+.mi.bad{border-color:var(--bad);background:var(--bad-soft)}
+.ls-foot{max-width:560px;width:100%;margin:0 auto;padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px));display:grid;gap:12px}
+.fb{border-radius:16px;padding:14px 16px;display:grid;gap:4px}
+.fb.good{background:var(--good-soft);color:var(--good)}
+.fb.bad{background:var(--bad-soft);color:var(--bad)}
+.fb p{color:var(--ink);font-size:.92rem}
+.sum{position:relative;display:grid;gap:16px;text-align:center;justify-items:center;padding-top:3vh}
+.sum .say{flex:none}
+.sum-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.sum-stats div{background:var(--surface);border-radius:16px;padding:12px 6px;box-shadow:0 0 0 1.5px var(--line)}
+.sum-stats b{display:block;font-family:var(--font-d);font-size:1.4rem}
+.confetti{position:absolute;top:0;width:9px;height:14px;border-radius:2px;opacity:0;animation:fall 2.6s ease-in infinite}
+@keyframes fall{0%{transform:translateY(-10px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(300px) rotate(360deg);opacity:0}}
+.confirm{background:var(--bad-soft);border-radius:16px;padding:14px;display:grid;gap:10px}
+
+#toasts{position:fixed;left:0;right:0;bottom:calc(92px + env(safe-area-inset-bottom,0px));display:grid;justify-items:center;gap:8px;z-index:60;pointer-events:none;padding:0 16px}
+.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);padding:8px 16px 8px 10px;border-radius:16px;font-weight:700;font-size:.9rem;max-width:420px}
+</style>
+
+<div id="app" class="app"></div>
+<nav id="nav" class="nav" hidden></nav>
+<div id="lesson" class="overlay" hidden></div>
+<div id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- Datos ---------- */
+var CATS=[
+ {id:'int',name:'Interpersonales',d:'Cómo te relacionas y colaboras con otras personas.'},
+ {id:'cog',name:'Cognitivas',d:'Cómo piensas, decides y organizas tu trabajo.'},
+ {id:'emo',name:'Emocionales',d:'Cómo manejas la presión, la crítica y la motivación.'}
+];
+var CT={};CATS.forEach(function(c){CT[c.id]=c;});
+// El orden de las habilidades es también el orden de las 10 preguntas del diagnóstico.
+var SKILLS=[
+ {id:'com',cat:'int',name:'Comunicación de ideas'},
+ {id:'tiempo',cat:'cog',name:'Gestión del tiempo'},
+ {id:'adapt',cat:'emo',name:'Adaptabilidad y presión'},
+ {id:'equipo',cat:'int',name:'Trabajo en equipo'},
+ {id:'critico',cat:'cog',name:'Pensamiento crítico y creativo'},
+ {id:'feedback',cat:'emo',name:'Recibir y dar feedback'},
+ {id:'empatia',cat:'int',name:'Empatía y escucha'},
+ {id:'decis',cat:'cog',name:'Toma de decisiones'},
+ {id:'conf',cat:'emo',name:'Confianza y motivación'},
+ {id:'marca',cat:'int',name:'Networking y marca personal'}
+];
+var SK={};SKILLS.forEach(function(s,i){s.i=i;s.c='var(--'+s.cat+')';s.ct='var(--'+s.cat+'-t)';SK[s.id]=s;});
+function cs(c){return '--c:var(--'+c.id+');--ct:var(--'+c.id+'-t)';}
+
+var ICONS={
+ com:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+ equipo:'<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19c0-3.5 3-5.5 6-5.5s6 2 6 5.5M15 14c3 0 6 1.5 6 5"/>',
+ tiempo:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/>',
+ feedback:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',
+ adapt:'<path d="M3 12h4l3-7 4 14 3-7h4"/>',
+ empatia:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+ decis:'<path d="M6 21V4M6 5h12l-3 4 3 4H6"/>',
+ marca:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+ critico:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',
+ conf:'<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+ flame:'<path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/>',
+ bolt:'<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
+ route:'<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h7a4 4 0 0 0 0-8H9a4 4 0 0 1 0-6h7"/>',
+ book:'<path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/>',
+ cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+ lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+ check:'<path d="M5 12l5 5L20 7"/>',
+ x:'<path d="M6 6l12 12M18 6L6 18"/>',
+ left:'<path d="M15 5l-7 7 7 7"/>',
+ right:'<path d="M9 5l7 7-7 7"/>',
+ trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+ play:'<path d="M8 5l11 7-11 7z"/>',
+ pen:'<path d="M4 20l4-1 11-11-3-3L5 16z"/>'
+};
+function ic(n,s){s=s||22;return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[n]+'</svg>';}
+
+/* ---------- Mascota ---------- */
+var BODY='M32 104C30 66 66 40 108 40C150 40 176 62 174 96C172 132 140 160 98 160C58 160 34 138 32 104Z';
+function mascot(size,mood,cls){
+  var h=Math.round(size*200/206);
+  return '<svg class="mascot'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" viewBox="0 0 206 200" width="'+size+'" height="'+h+'" aria-hidden="true">'+
+  '<ellipse class="halo" cx="103" cy="100" rx="94" ry="92"/>'+
+  '<g class="spark"><g transform="translate(26 42)"><path d="M0-9L2.4-2.4 9 0 2.4 2.4 0 9-2.4 2.4-9 0-2.4-2.4Z"/></g><g transform="translate(182 56)"><path d="M0-8L2.2-2.2 8 0 2.2 2.2 0 8-2.2 2.2-8 0-2.2-2.2Z"/></g><g transform="translate(172 160)"><path d="M0-7L2-2 7 0 2 2 0 7-2 2-7 0-2-2Z"/></g></g>'+
+  '<text class="zzz" x="150" y="52">z</text><text class="zzz z2" x="168" y="34">z</text>'+
+  '<g class="float">'+
+  '<path class="b-dark" d="'+BODY+'"/>'+
+  '<path class="b-light" transform="translate(-4 -5) translate(103 100) scale(.96) translate(-103 -100)" d="'+BODY+'"/>'+
+  '<g class="eye"><ellipse class="sclera" cx="80" cy="95" rx="9.5" ry="12.5"/><ellipse class="pupil" cx="80" cy="97" rx="5.5" ry="8"/></g>'+
+  '<g class="eye"><ellipse class="sclera" cx="125" cy="94" rx="9.5" ry="12.5"/><ellipse class="pupil" cx="125" cy="96" rx="5.5" ry="8"/></g>'+
+  '<path class="lid" d="M70 97Q80 105 90 97"/><path class="lid" d="M115 96Q125 104 135 96"/>'+
+  '<path class="mouth m-happy" d="M91 121Q102 129 113 121"/>'+
+  '<path class="mouth m-cheer" d="M88 117Q102 140 116 117Z"/>'+
+  '<path class="mouth m-oops" d="M93 128Q102 120 111 128"/>'+
+  '<path class="mouth m-think" d="M94 124L110 121"/>'+
+  '<ellipse class="mouth m-wow" cx="102" cy="124" rx="5" ry="6.5"/>'+
+  '<path class="mouth m-sleep" d="M96 123Q102 127 108 123"/>'+
+  '</g></svg>';
+}
+function mrow(size,mood,text,cls,id){
+  return '<div class="mrow"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(size,mood,cls)+'</button><div class="say"><span class="say-t"'+(id?' id="'+id+'"':'')+'>'+esc(text)+'</span></div></div>';
+}
+var TAPS=['¡Cosquillas!','Aquí estoy. ¿Seguimos?','Un nivel al día y llegamos lejos.','¡Tú puedes!','Respira, sonríe y vamos.','Hoy es buen día para practicar.','¡Qué bueno verte por aquí!','Me encantan tus ideas.','Poquito a poco se llega lejos.'];
+var FB_OK=['¡Eso es!','¡Muy bien!','¡Exacto!','¡Así se hace!'];
+var FB_NO=['Casi, no pasa nada.','Buen intento.','Eso también enseña.'];
+
+var PROGRAMS=['Publicidad Digital y Mercadeo','Diseño Visual Digital'];
+
+var DIAG=[
+ ['com','Puedo explicar una idea de campaña o de diseño en pocas frases claras, sin perderme.'],
+ ['tiempo','Entrego mis trabajos a tiempo, sin dejarlos para la noche anterior.'],
+ ['adapt','Si cambian el brief a último momento, me reorganizo sin bloquearme.'],
+ ['equipo','Cuando hay un desacuerdo en el equipo, busco un punto medio en vez de imponer o callarme.'],
+ ['critico','Antes de dar una idea por buena, la cuestiono y busco datos o referencias que la respalden.'],
+ ['feedback','Cuando critican mi trabajo, escucho primero y luego decido qué cambiar.'],
+ ['empatia','Escucho al cliente o al público hasta entender qué necesita de verdad.'],
+ ['decis','Tomo decisiones con la información que tengo y asumo el resultado.'],
+ ['conf','Confío en mi capacidad para sacar adelante un reto nuevo, aunque me den nervios.'],
+ ['marca','Me presento y converso con personas de la industria con naturalidad.']
+];
+var SCALE=['Nunca','Casi nunca','A veces','Casi siempre','Siempre'];
+var DIAG_SAY=['Responde con sinceridad. Aquí no hay respuestas malas.','Piensa en cómo eres normalmente, no en cómo quisieras ser.','Vas muy bien, sigue así.','Cada respuesta ajusta tu ruta.','Casi en la mitad. Respira y sigue.','Sin presión, es solo para conocerte.','Ya me estoy imaginando tu ruta.','Faltan tres. ¡Tú puedes!','Dos más y listo.','¡Última pregunta!'];
+
+function C(q,o,a,why){return {k:'choice',q:q,o:o,a:a,why:why};}
+function O(q,items,why){return {k:'order',q:q,items:items,why:why||''};}
+function M(q,pairs){return {k:'match',q:q,pairs:pairs};}
+function R(q,hint){return {k:'reflect',q:q,hint:hint||'Escribe con tus palabras…'};}
+
+var LESSONS={
+com:[
+ {t:'Tu idea en 30 segundos',ex:[
+  C('Tu cliente te da 30 segundos en el ascensor. ¿Cómo abres la presentación de tu propuesta?',['Contando todo el proceso creativo desde el inicio','Con el problema del cliente y la idea central en una frase','Mostrando primero las 20 piezas diseñadas','Pidiendo disculpas porque aún no está pulida'],1,'Empezar por el problema y la idea central da contexto y gancho. Los detalles vienen después.'),
+  O('Ordena una presentación breve de una propuesta:',['Problema del cliente','Idea central','Cómo se ve en piezas','Resultado esperado','Siguiente paso'],'Va de lo general a lo concreto y termina con una acción.'),
+  R('Describe tu proyecto actual en una sola frase que entienda alguien ajeno a tu carrera.','Mi proyecto trata de…')]},
+ {t:'Nervios frente al público',ex:[
+  C('Sientes el corazón acelerado minutos antes de exponer. ¿Qué te ayuda más?',['Leer la diapositiva palabra por palabra','Respirar lento, ensayar la apertura en voz alta y moverte con calma','Hablar rápido para terminar antes','Evitar mirar al público'],1,'Ensayar la apertura y bajar el ritmo respiratorio reduce la activación y te da seguridad desde la primera frase.'),
+  M('Une cada hábito al ajuste que lo mejora:',[['Hablo muy rápido','Haz pausas al cambiar de idea'],['Leo las diapositivas','Usa palabras clave y cuenta la historia'],['Evito mirar al público','Mira a una persona por idea']]),
+  R('¿En qué momento de una presentación te cuesta más y qué podrías ensayar esta semana?')]},
+ {t:'Defiende tus decisiones creativas',ex:[
+  C('El cliente dice: “No me gusta ese color”. ¿Cuál es la mejor respuesta?',['Es lo que quedó mejor, así se queda.','Cambiarlo de inmediato sin preguntar nada.','Preguntar qué le preocupa y explicar el objetivo del color para su público.','Decirle que no entiende de diseño.'],2,'Preguntar abre la conversación y explicar el objetivo convierte el gusto en criterio.'),
+  O('Ordena cómo defender una decisión creativa:',['Recordar el objetivo del brief','Explicar la decisión','Apoyarla con un dato o ejemplo','Preguntar si responde a su necesidad'],'Primero el objetivo, luego la decisión y al final la validación.'),
+  R('Piensa en una decisión de tu trabajo. ¿Qué razón, y no solo gusto personal, la respalda?')]}
+],
+equipo:[
+ {t:'Repartir el trabajo',ex:[
+  C('En un proyecto de 4 personas nadie dice quién hace qué. ¿Qué haces?',['Esperar a que alguien más lo organice','Hacerlo todo tú para asegurar la nota','Proponer roles según fortalezas y fechas, y confirmarlos por el chat','Dividir a ciegas sin avisar'],2,'Proponer roles y dejarlos por escrito evita confusiones y reparte la carga.'),
+  M('Une cada rol con lo que hace:',[['Coordinador/a','Cuida fechas y seguimiento'],['Estratega','Define el enfoque y el mensaje'],['Diseñador/a','Construye las piezas visuales'],['Revisor/a','Verifica calidad y ortografía']]),
+  R('¿Qué rol sueles tomar en un equipo y cuál te gustaría practicar?')]},
+ {t:'Desacuerdos que suman',ex:[
+  C('Dos compañeros discuten por la dirección creativa y el ambiente se tensa. Lo más útil es:',['Votar rápido y seguir sin hablar del tema','Poner los criterios del brief sobre la mesa y comparar ambas ideas con ellos','Quedarte callado/a','Apoyar al que te cae mejor'],1,'Los criterios del brief sacan la discusión de lo personal y la llevan al objetivo.'),
+  O('Ordena los pasos para resolver un desacuerdo:',['Escuchar sin interrumpir','Reformular lo que entendiste','Volver al objetivo común','Acordar una decisión y un responsable'],'Escuchar primero baja la tensión; cerrar con un responsable evita que quede en el aire.'),
+  R('Recuerda un desacuerdo reciente en un trabajo grupal. ¿Qué harías distinto?')]},
+ {t:'Cuando alguien no cumple',ex:[
+  C('Un compañero no ha entregado su parte y faltan dos días. ¿Qué haces primero?',['Hablar con él en privado para entender qué pasa y acordar una nueva fecha','Publicar en el grupo que no hace nada','Hacer su parte en silencio y quejarte después','Avisar al profesor sin hablar antes con él'],0,'Una conversación privada y con fecha nueva protege la relación y busca solución.'),
+  M('Une cada reacción con su efecto:',[['Quejarse en el grupo','Daña la confianza'],['Conversar en privado','Abre una solución'],['Asumir todo en silencio','Genera resentimiento']]),
+  R('¿Cómo le pedirías a un compañero que cumpla, de forma amable y firme? Escribe la frase.')]}
+],
+empatia:[
+ {t:'Conoce a tu público',ex:[
+  C('Vas a hacer una campaña para jóvenes de 18 a 24 años sobre ahorro. ¿Qué haces primero?',['Usar el estilo que más te gusta','Investigar cómo hablan, qué les preocupa y dónde pasan el tiempo','Copiar una campaña famosa','Suponer que piensan igual que tú'],1,'Investigar al público evita crear desde tus propias suposiciones.'),
+  M('Une cada método con lo que te da:',[['Entrevista','Escucha en profundidad a una persona'],['Encuesta','Datos de muchas personas'],['Observación','Ver lo que la gente hace en realidad']]),
+  R('Describe a la persona a la que le hablas en tu proyecto actual: qué necesita y qué le frustra.')]},
+ {t:'Escucha activa',ex:[
+  C('Un cliente te explica su problema y tú ya tienes la solución en mente. ¿Qué haces?',['Interrumpir para proponer tu idea','Dejarlo terminar, resumir lo que entendiste y preguntar lo que falte','Mirar el celular','Cambiar de tema'],1,'Resumir lo que entendiste confirma que escuchaste y corrige errores a tiempo.'),
+  O('Ordena la escucha activa:',['Escuchar sin interrumpir','Reformular con tus palabras','Hacer preguntas abiertas','Confirmar el siguiente paso'],'Se escucha, se confirma, se profundiza y se cierra.'),
+  R('Piensa en una conversación en la que no escuchaste del todo. ¿Qué te distrajo?')]},
+ {t:'Preguntas para entender el brief',ex:[
+  C('¿Cuál pregunta ayuda más a entender un brief?',['¿Está bien así?','¿Qué problema de negocio quieres resolver con esta pieza?','¿Te gusta el azul?','¿Cuándo pagas?'],1,'Una pregunta abierta sobre el problema revela el objetivo real detrás del encargo.'),
+  M('Une cada pregunta con lo que define:',[['¿Quién es tu cliente ideal?','Define al público'],['¿Qué quieres que hagan al verla?','Define la acción'],['¿Qué te ha funcionado antes?','Aprende de la experiencia']]),
+  R('Escribe tres preguntas que harías al empezar un proyecto nuevo.')]}
+],
+marca:[
+ {t:'Tu portafolio cuenta una historia',ex:[
+  C('Estás armando tu portafolio. ¿Qué es mejor?',['Subir todos tus trabajos','Elegir pocos proyectos y explicar el problema, tu rol y el resultado de cada uno','Poner solo imágenes sin texto','Esperar a tener algo perfecto'],1,'Pocos proyectos bien explicados muestran criterio, no solo producción.'),
+  O('Ordena el caso de un proyecto en tu portafolio:',['Contexto y problema','Tu rol','Proceso','Resultado'],'Es una mini historia: contexto, aporte, camino y resultado.'),
+  R('Elige el proyecto del que más orgulloso/a estás y cuéntalo en 3 líneas.')]},
+ {t:'Preséntate en una frase',ex:[
+  C('Alguien de una agencia te pregunta “¿a qué te dedicas?”. ¿Qué respuesta funciona mejor?',['Estudio publicidad.','Me enfoco en entender al consumidor joven; acabo de hacer un estudio sobre hábitos de compra online.','Hago de todo.','No sé todavía.'],1,'Una frase con enfoque y un logro concreto es fácil de recordar.'),
+  M('Une cada parte de tu presentación con su función:',[['Quién eres','Tu carrera o enfoque'],['Qué haces','Tu especialidad'],['Qué lograste','Un resultado concreto']]),
+  R('Escribe tu presentación en una frase.')]},
+ {t:'Networking real',ex:[
+  C('Estás en un evento de la industria. ¿Qué es lo más efectivo?',['Quedarte en una esquina con el celular','Acercarte a alguien, preguntar por su trabajo, compartir el tuyo y pedir el contacto','Entregar tu portafolio a todos sin hablar','Irte temprano'],1,'Una conversación genuina deja mejor recuerdo que repartir enlaces.'),
+  O('Ordena una conversación de networking:',['Saludar y presentarte','Preguntar por su trabajo','Compartir algo tuyo, breve','Pedir contacto y escribir después'],'Se conecta primero y se da seguimiento después.'),
+  R('Escribe el mensaje que enviarías en LinkedIn a una persona que admiras.')]}
+],
+tiempo:[
+ {t:'Del brief al calendario',ex:[
+  C('Tienes un proyecto para entregar en 10 días. ¿Cuál es el mejor primer paso?',['Empezar por la pieza que más te gusta','Listar todas las tareas, estimar cuánto toma cada una y ponerles fecha','Esperar a sentir inspiración','Dejar el diseño final para el último día'],1,'Ver el trabajo completo y fecharlo evita sorpresas de última hora.'),
+  O('Ordena la planificación de un proyecto:',['Entender el entregable y la fecha final','Listar tareas','Estimar el tiempo de cada tarea','Ponerles fecha en el calendario','Revisar el avance cada día'],'Se planifica de lo global a lo diario.'),
+  R('Elige un trabajo pendiente y escribe sus 3 primeras tareas con fecha.','1. … 2. … 3. …')]},
+ {t:'Cómo vencer la procrastinación',ex:[
+  C('Llevas 40 minutos viendo reels antes de empezar un trabajo. ¿Qué ayuda más?',['Prometerte que mañana empiezas','Elegir una tarea de 10 minutos, quitar el celular de la vista y empezar','Esperar a tener más motivación','Cambiar el trabajo por otro más fácil'],1,'Empezar pequeño y quitar distracciones funciona mejor que esperar motivación.'),
+  M('Une cada técnica con su descripción:',[['Pomodoro','25 min de foco y 5 de pausa'],['Bloques de tiempo','Reservar horas fijas para una tarea'],['Lista del día','Máximo 3 prioridades']]),
+  R('¿Qué te distrae más cuando trabajas y cómo lo alejarías hoy?')]},
+ {t:'Prioriza sin angustia',ex:[
+  C('Tienes una entrega mañana, otra el viernes que vale más y una tarea sin fecha. ¿Cómo priorizas?',['Primero lo urgente de mañana y reservas ya un bloque para la del viernes','La que sea más fácil','La de mayor valor sin importar nada más','Un poco de todas sin terminar ninguna'],0,'Combina urgencia e importancia: cierras lo que vence y proteges tiempo para lo que pesa más.'),
+  O('Ordena de mayor a menor prioridad:',['Entrega de mañana que vale 30%','Entrega del viernes que vale 40%','Responder correos no urgentes','Ordenar tu escritorio'],'Lo urgente e importante va primero; lo que no vence ni pesa, al final.'),
+  R('Escribe tus 3 prioridades de esta semana.','1. … 2. … 3. …')]}
+],
+critico:[
+ {t:'Cuestiona antes de creer',ex:[
+  C('Un compañero afirma que “a todo el mundo le gusta el video corto”, sin dar fuentes. ¿Qué haces?',['Lo aceptas porque suena lógico','Preguntas de dónde sale el dato y buscas una fuente confiable','Lo ignoras','Lo repites como hecho en tu presentación'],1,'Pedir la fuente evita construir una estrategia sobre una suposición.'),
+  M('Une cada pregunta con lo que revela:',[['¿Quién lo dice?','La fuente y su credibilidad'],['¿Con qué datos?','La evidencia'],['¿Qué se está dejando por fuera?','Los sesgos o vacíos']]),
+  R('¿Qué afirmación de tu área has dado por cierta sin verificarla?')]},
+ {t:'De un problema a muchas ideas',ex:[
+  C('Te piden una idea para promocionar un producto. ¿Cuál es el mejor primer paso para ser creativo?',['Tomar la primera idea que aparezca','Generar muchas ideas sin juzgar y luego filtrarlas con el objetivo','Copiar una campaña famosa','Esperar inspiración'],1,'Cantidad primero y filtro después: así aparecen ideas que no se te ocurrirían de entrada.'),
+  O('Ordena un proceso creativo:',['Entender el problema','Generar muchas ideas sin juzgar','Agrupar y filtrar con criterios','Probar la mejor con un prototipo rápido'],'Se abre primero y se cierra después.'),
+  R('Escribe 3 ideas muy distintas para resolver un reto de tu proyecto actual.','1. … 2. … 3. …')]},
+ {t:'Usa datos para argumentar',ex:[
+  C('Tu publicación tuvo mucho alcance pero pocos clics. ¿Cuál es la lectura más crítica?',['Fue un éxito total','Alcance no es interés; reviso mensaje, público y llamado a la acción','Culpar al algoritmo','Borrar la publicación'],1,'Una métrica sola no cuenta toda la historia: hay que cruzarla con el objetivo.'),
+  M('Une cada métrica con lo que mide:',[['Alcance','Cuántas personas la vieron'],['Interacción','Cuántas reaccionaron'],['Conversión','Cuántas hicieron la acción buscada']]),
+  R('Elige un trabajo tuyo y escribe una pregunta crítica para evaluarlo.')]}
+],
+decis:[
+ {t:'Propón una dirección',ex:[
+  C('El equipo lleva una hora sin decidir el concepto de la campaña. ¿Qué haces?',['Seguir esperando','Resumir las opciones, proponer una y pedir objeciones','Irte del grupo','Imponer tu idea sin escuchar'],1,'Liderar es dar un punto de partida y abrirlo a objeciones.'),
+  O('Ordena cómo guiar una decisión:',['Aclarar el objetivo','Listar las opciones','Elegir con criterios','Asignar responsables'],'Objetivo, opciones, criterio y responsables.'),
+  R('¿En qué situación reciente te faltó proponer una dirección?')]},
+ {t:'Decide con incertidumbre',ex:[
+  C('Debes elegir entre dos propuestas y te falta un dato. Lo mejor es:',['Esperar hasta tener información perfecta','Definir qué dato es clave, conseguir lo posible y decidir con un plan de ajuste','Lanzar una moneda','Que siempre decida otra persona'],1,'Casi nunca hay información perfecta; un plan de ajuste reduce el riesgo.'),
+  M('Une cada concepto con su significado:',[['Criterio','Lo que usas para comparar'],['Riesgo','Lo que puede salir mal'],['Plan B','Cómo corriges si falla']]),
+  R('¿Qué decisión estás posponiendo y qué la haría más fácil?')]},
+ {t:'Elegir entre dos buenas ideas',ex:[
+  C('Tu equipo tiene dos ideas creativas buenas y el tiempo se acaba. ¿Cómo deciden?',['Gana la del más insistente','Comparan ambas contra el objetivo y el público con 2 o 3 criterios acordados','Mezclan ambas sin priorizar','Dejan que el cliente adivine'],1,'Criterios acordados de antemano vuelven la decisión justa y rápida.'),
+  O('Ordena cómo elegir entre opciones:',['Definir 2 o 3 criterios','Puntuar cada opción','Elegir la de mejor puntaje','Comunicar la decisión y su razón'],'Primero los criterios, luego la comparación y al final la comunicación.'),
+  R('Piensa en una decisión creativa reciente. ¿Qué criterios usaste?')]}
+],
+adapt:[
+ {t:'El brief cambió',ex:[
+  C('A dos días de la entrega el cliente cambia el enfoque de la campaña. ¿Cuál es el mejor paso?',['Quejarte y exigir que se respete el plan original','Revisar qué se puede reutilizar, ajustar el plan y confirmar el nuevo alcance','Empezar de cero sin hablar con nadie','Entregar lo anterior ignorando el cambio'],1,'Reutilizar y confirmar el alcance ahorra tiempo y evita malentendidos.'),
+  O('Ordena cómo reaccionar a un cambio de último minuto:',['Respirar y entender el cambio','Confirmar qué cambia y qué se mantiene','Ajustar tareas y fechas','Avisar al equipo del nuevo plan'],'Primero calma y claridad, después plan y comunicación.'),
+  R('¿Qué cambio inesperado te ha costado más y qué aprendiste?')]},
+ {t:'Pausa bajo presión',ex:[
+  C('Tienes tres entregas el mismo día y sientes que no llegas. Lo mejor es:',['Seguir sin dormir hasta terminar todo','Parar cinco minutos, respirar, decidir el orden y empezar por una tarea','Dejarlo todo para después','Culpar al profesor'],1,'Una pausa corta con un plan claro rinde más que seguir en modo pánico.'),
+  M('Une cada recurso con lo que logra:',[['Respiración lenta','Calma el cuerpo'],['Lista corta de tareas','Ordena la mente'],['Pedir ayuda a tiempo','Reduce la carga']]),
+  R('¿Qué señales te da tu cuerpo cuando estás saturado y qué pausa podrías tomarte?')]},
+ {t:'Aprende algo nuevo rápido',ex:[
+  C('Te asignan una herramienta que no conoces para un proyecto. ¿Cuál es el mejor enfoque?',['Decir que no puedes','Ver un tutorial corto, probar con un mini ejercicio y pedir ayuda a alguien con experiencia','Esperar a que te la enseñen','Hacerlo a ciegas hasta el último día'],1,'Practicar en pequeño y pedir ayuda acelera el aprendizaje.'),
+  O('Ordena una forma de aprender rápido:',['Definir qué necesitas lograr','Ver un tutorial corto','Practicar con un ejercicio pequeño','Aplicarlo al proyecto real'],'Del objetivo a la práctica y luego al uso real.'),
+  R('Escribe una herramienta o habilidad que quieras aprender y el primer paso para hoy.')]}
+],
+feedback:[
+ {t:'Escucha la crítica',ex:[
+  C('Tu profesor dice que tu logo no comunica el concepto. ¿Cuál es la mejor reacción?',['Justificarte de inmediato','Escuchar, tomar nota y preguntar qué lo haría ver más claro','Decir que a ti sí te gusta','Cambiarlo todo sin pensar'],1,'Preguntar convierte una crítica en información útil para mejorar.'),
+  M('Clasifica cada comentario:',[['“La jerarquía visual confunde”','Feedback sobre el trabajo'],['“Tú nunca entiendes”','Ataque personal, no ayuda'],['“¿Qué parte no te convence?”','Pregunta para entender mejor']]),
+  R('Recuerda un comentario difícil que recibiste. ¿Qué parte te sirvió?')]},
+ {t:'Da feedback útil',ex:[
+  C('Tu compañero te muestra su pieza para redes. ¿Cuál comentario es más útil?',['Está feo','El texto se lee poco sobre el fondo; prueba un color más oscuro para ganar contraste','Haz lo que quieras','A mí me gustaba la anterior'],1,'Un comentario específico y con alternativa se puede aplicar de inmediato.'),
+  O('Ordena una estructura de feedback:',['Resaltar algo que funciona','Señalar un punto concreto a mejorar','Proponer una alternativa','Preguntar cómo lo ve la otra persona'],'Empezar por lo que funciona facilita que escuchen lo demás.'),
+  R('Escribe un feedback sobre un trabajo tuyo como si fueras un mentor amable.')]},
+ {t:'Después del feedback',ex:[
+  C('Recibiste 8 comentarios distintos sobre tu trabajo. ¿Qué haces?',['Aplicar todo sin filtro','Ignorarlos todos','Agruparlos, priorizar los que ayudan al objetivo y definir qué cambiar primero','Pedir más opiniones hasta que alguien coincida contigo'],2,'Agrupar y priorizar según el objetivo evita cambios contradictorios.'),
+  M('Une cada tipo de comentario con qué hacer:',[['Lo repiten varias personas','Probablemente es un problema real'],['Dos comentarios se contradicen','Vuelve al objetivo del brief'],['Es de gusto personal','Valóralo, pero no es obligatorio']]),
+  R('Elige un feedback reciente y escribe el cambio que harás por él.')]}
+],
+conf:[
+ {t:'Habla bien de tu trabajo',ex:[
+  C('Alguien elogia tu proyecto y respondes “ay, no fue nada”. ¿Qué respuesta fortalece más tu confianza?',['Gracias, me esforcé mucho en la investigación y estoy contento/a con el resultado','No fue gran cosa','Fue pura suerte','Es que mis compañeros hicieron todo'],0,'Agradecer y nombrar tu aporte reconoce tu trabajo sin presumir.'),
+  M('Une cada pensamiento con una versión más útil:',[['No sirvo para esto','Todavía estoy aprendiendo esto'],['Seguro me va a salir mal','Me preparo y lo intento'],['Todos lo hacen mejor','Me comparo con mi avance de hace un mes']]),
+  R('Escribe tres logros tuyos de este semestre, por pequeños que sean.','1. … 2. … 3. …')]},
+ {t:'Los errores también enseñan',ex:[
+  C('Entregaste una pieza con un error de ortografía y te sientes mal. ¿Qué ayuda más?',['Pensar que eres un fracaso','Corregirlo, anotar cómo evitarlo (una revisión final) y seguir','Esconderlo','Dejar de entregar trabajos'],1,'Convertir el error en un hábito nuevo te hace avanzar en vez de quedarte en la culpa.'),
+  O('Ordena cómo aprender de un error:',['Reconocer el error sin culparte','Corregirlo','Identificar qué lo causó','Definir un hábito para evitarlo'],'Sin culpa se piensa mejor.'),
+  R('Recuerda un error reciente. ¿Qué aprendiste y qué harás distinto?')]},
+ {t:'Mantén la motivación',ex:[
+  C('Llevas semanas con un proyecto largo y estás sin ganas. ¿Qué estrategia ayuda más?',['Esperar a que vuelvan las ganas','Dividir en metas pequeñas, celebrar cada avance y recordar para qué lo haces','Abandonarlo','Compararte con otros'],1,'Las metas pequeñas y los avances visibles mantienen el impulso.'),
+  M('Une cada estrategia con su efecto:',[['Meta pequeña','Se cumple en pocos días'],['Celebrar avances','Refuerza el hábito'],['Recordar el para qué','Da sentido al esfuerzo']]),
+  R('¿Qué te motiva de tu carrera y cómo puedes recordarlo en los días difíciles?')]}
+]
+};
+
+var PROMPTS=[
+ '¿Qué habilidad blanda usaste hoy sin darte cuenta?',
+ '¿Qué situación de hoy te dio energía y cuál te la quitó?',
+ '¿Qué comentario de alguien te quedó dando vueltas?',
+ '¿Qué harías distinto si repitieras el día de hoy?',
+ 'Escribe algo que le agradeces a un compañero de equipo.',
+ '¿Qué te preocupa de tus próximas entregas y cuál sería un primer paso?',
+ '¿Qué lograste esta semana que te dé orgullo?'
+];
+var MOODS=['Con energía','Bien','Normal','Cansado/a','Frustrado/a'];
+var MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+var MES3=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+var WD3=['dom','lun','mar','mié','jue','vie','sáb'];
+
+/* ---------- Estado y almacenamiento ---------- */
+var KEY='mi-bitacora-habilidades-v2';
+var SHEETS_ENDPOINT='https://script.google.com/macros/s/AKfycbx_QsDhF8_ewxle6cWl8Vka7Xluimaqmipg8WtHUUarh6o2XNkIfvLVkUqmvHlggiwicA/exec';
+function fresh(){return {v:2,onboarded:false,name:'',program:'',semester:'',start:null,answers:[],scores:null,journey:[],done:{},xp:0,diary:[],demo:0,sessionId:''};}
+function load(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.v===2){var f=fresh();for(var k in o)f[k]=o[k];return f;}}}catch(e){}return fresh();}
+var state=load();
+function save(){if(!state.sessionId)state.sessionId=uid();try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function sendSheetEvent(event,details){
+  if(!SHEETS_ENDPOINT)return;
+  if(!state.sessionId)state.sessionId=uid();
+  var payload={
+    sessionId:state.sessionId,
+    timestamp:new Date().toISOString(),
+    event:event,
+    name:state.name||'',
+    program:state.program||'',
+    semester:state.semester||'',
+    xp:state.xp||0,
+    progress:doneCount?doneCount():0,
+    scores:state.scores||null,
+    answers:state.answers||[],
+    userAgent:navigator.userAgent||'',
+    page:location.href,
+    details:details||{}
+  };
+  try{
+    fetch(SHEETS_ENDPOINT,{
+      method:'POST',
+      mode:'cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload)
+    }).catch(function(){});
+  }catch(e){}
+}
+
+var ui={view:'ruta',step:'welcome',q:0,ans:[],scores:null,reg:{name:state.name||'',program:state.program||'',sem:state.semester||'3'},lesson:null,cal:null,diaryOpen:false,draft:{mood:'',skill:'',text:''},filter:'todas',confirm:null,delId:null};
+
+/* ---------- Utilidades ---------- */
+function $(s,r){return (r||document).querySelector(s);}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function pad(n){return String(n).padStart(2,'0');}
+function ymd(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function parse(s){var p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);}
+function addDays(s,n){var d=parse(s);d.setDate(d.getDate()+n);return ymd(d);}
+function diffDays(a,b){var A=a.split('-').map(Number),B=b.split('-').map(Number);return Math.round((Date.UTC(B[0],B[1]-1,B[2])-Date.UTC(A[0],A[1]-1,A[2]))/864e5);}
+function today(){var d=new Date();d.setDate(d.getDate()+state.demo);return ymd(d);}
+function fmt(s){var d=parse(s);return WD3[d.getDay()]+' '+d.getDate()+' '+MES3[d.getMonth()];}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function untilTomorrow(){var n=new Date();var t=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);var m=Math.max(0,Math.floor((t-n)/60000));return Math.floor(m/60)+' h '+(m%60)+' min';}
+function toast(msg){var t=document.createElement('div');t.className='toast';t.innerHTML=mascot(30,'cheer','')+'<span></span>';t.lastChild.textContent=msg;$('#toasts').appendChild(t);setTimeout(function(){t.remove();},2400);}
+function first(){return state.name.trim().split(/\s+/)[0]||'';}
+
+function dayIdx(){return diffDays(state.start,today());}
+function pctOf(s){return Math.round(state.scores[s]/5*100);}
+function doneOfSkill(s){var n=0;state.journey.forEach(function(j,i){if(j.s===s&&state.done[i])n++;});return n;}
+function curPct(s){return Math.min(100,pctOf(s)+10*doneOfSkill(s));}
+function activitySet(){var set={};Object.keys(state.done).forEach(function(k){set[state.done[k].date]=1;});return set;}
+function streak(){var set=activitySet();var d=today();if(!set[d])d=addDays(d,-1);var n=0;while(set[d]){n++;d=addDays(d,-1);}return n;}
+function doneCount(){return Object.keys(state.done).length;}
+function sortedSkills(sc){return SKILLS.slice().sort(function(a,b){return sc[a.id]-sc[b.id]||a.i-b.i;});}
+function weakest(n){return sortedSkills(state.scores).slice(0,n);}
+function buildJourney(sc){
+  var order=sortedSkills(sc).map(function(s){return s.id;});
+  var rounds=[order,order.slice(0,6),order.slice(0,3)];var j=[];
+  rounds.forEach(function(r,li){r.forEach(function(s){j.push({s:s,l:li});});});
+  return j;
+}
+function lessonOf(i){var j=state.journey[i];return LESSONS[j.s][j.l];}
+
+/* ---------- Onboarding ---------- */
+function regSay(){var n=ui.reg.name.trim();return n.length>=2?'Mucho gusto, '+n.split(/\s+/)[0]+'. ¿Qué estudias?':'¿Cómo te llamas y qué estudias?';}
+function skillRows(sc,prio){
+  return sortedSkills(sc).map(function(s){return s;});
+}
+function viewOnboarding(){
+  var s=ui.step;
+  if(s==='welcome'){
+    return '<div class="hero mbox"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(190,'happy','')+'</button>'+
+    '<div class="say up"><span class="say-t">¡Hola! Soy tu compañero de bitácora y voy a acompañarte en cada nivel.</span></div>'+
+    '<h1 class="ttl">Mi Bitácora de <span class="grad">Habilidades Blandas</span></h1>'+
+    '<p class="muted">Un nivel nuevo cada día para reforzar las habilidades que más necesitas en tu carrera.</p>'+
+    '<div class="points"><div><span class="pi">'+ic('feedback',20)+'</span><span><b>Diagnóstico de 10 preguntas</b><br><span class="muted small">Descubre dónde tienes más espacio para crecer.</span></span></div>'+
+    '<div><span class="pi">'+ic('route',20)+'</span><span><b>Ruta hecha para ti</b><br><span class="muted small">Empieza por tus habilidades más débiles.</span></span></div>'+
+    '<div><span class="pi">'+ic('lock',20)+'</span><span><b>Un nivel se abre cada día</b><br><span class="muted small">Vuelve a diario y mantén tu racha.</span></span></div></div>'+
+    '<button class="btn primary big" data-act="ob-start">Empezar</button></div>';
+  }
+  if(s==='reg'){
+    var ok=ui.reg.name.trim().length>=2&&ui.reg.program;
+    var sems='';for(var i=1;i<=10;i++)sems+='<option value="'+i+'"'+(String(ui.reg.sem)===String(i)?' selected':'')+'>'+i+'.º semestre</option>';
+    return '<div class="stack" style="padding-top:2vh">'+mrow(92,'happy',regSay(),'','say-reg')+
+    '<div class="field"><label for="f-name">Tu nombre</label><input id="f-name" type="text" autocomplete="given-name" maxlength="40" value="'+esc(ui.reg.name)+'" placeholder="Tu nombre"></div>'+
+    '<div class="field"><label>Tu programa</label><div class="choice-cards">'+PROGRAMS.map(function(p){return '<button class="pc'+(ui.reg.program===p?' on':'')+'" data-act="prog" data-p="'+esc(p)+'">'+esc(p)+'</button>';}).join('')+'</div></div>'+
+    '<div class="field"><label for="f-sem">Semestre</label><select id="f-sem">'+sems+'</select></div>'+
+    '<button id="btn-reg" class="btn primary big" data-act="reg-next"'+(ok?'':' disabled')+'>Continuar</button></div>';
+  }
+  if(s==='diag'){
+    var q=ui.q,t=DIAG.length,cur=ui.ans[q];
+    return '<div class="stack" style="padding-top:2vh"><div class="row" style="flex-wrap:nowrap"><button class="icon-btn" data-act="diag-back" aria-label="Atrás">'+ic('left')+'</button><div class="progress" style="flex:1"><i style="width:'+(q/t*100)+'%"></i></div><span class="muted small num">'+(q+1)+'/'+t+'</span></div>'+
+    mrow(84,q===t-1?'happy':'think',DIAG_SAY[q])+
+    '<p class="label" style="margin-top:6px">Diagnóstico</p><h2 class="qtext">'+esc(DIAG[q][1])+'</h2><p class="muted small">¿Con qué frecuencia te pasa?</p>'+
+    '<div class="ans">'+SCALE.map(function(l,i){return '<button class="'+(cur===i+1?'on':'')+'" data-act="ans" data-v="'+(i+1)+'">'+l+'</button>';}).join('')+'</div></div>';
+  }
+  var sc=ui.scores,w=sortedSkills(sc).slice(0,3),prio={};w.forEach(function(x){prio[x.id]=1;});
+  var blocks=CATS.map(function(c){
+    var sk=sortedSkills(sc).filter(function(x){return x.cat===c.id;});
+    var avg=Math.round(sk.reduce(function(a,x){return a+sc[x.id];},0)/sk.length/5*100);
+    return '<section class="card" style="'+cs(c)+'"><div class="cat-h"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><b class="cat-t">'+c.name+'</b><span class="num">'+avg+'%</span></div><div class="track"><i class="now" style="width:'+avg+'%"></i></div></div>'+
+    sk.map(function(x){var p=Math.round(sc[x.id]/5*100);return '<div class="skrow" style="--c:'+x.c+'"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span class="row" style="flex-wrap:nowrap;min-width:0"><span class="sk-dot">'+ic(x.id,15)+'</span><b>'+esc(x.name)+'</b></span><span class="num">'+p+'%</span></div><div class="track"><i class="now" style="width:'+p+'%"></i></div>'+(prio[x.id]?'<span class="chip prio" style="justify-self:start">Prioridad</span>':'')+'</div>';}).join('')+'</section>';
+  }).join('');
+  return '<div class="stack" style="padding-top:2vh">'+mrow(100,'cheer','Listo, '+ui.reg.name.trim().split(/\s+/)[0]+'. Armé tu ruta y vamos a empezar por '+w.map(function(x){return x.name.toLowerCase();}).join(', ').replace(/, ([^,]*)$/,' y $1')+'.')+
+  '<h1 style="font-size:1.7rem">Tu diagnóstico por categoría</h1>'+blocks+
+  '<p class="muted">Tu ruta tiene <b style="color:var(--ink)">19 niveles</b>, uno por día. Primero cubres las 10 habilidades, luego refuerzas las 6 más débiles y al final las 3 prioritarias.</p>'+
+  '<button class="btn primary big" data-act="ob-finish">Comenzar mi ruta</button></div>';
+}
+
+/* ---------- Ruta ---------- */
+function rutaSay(){
+  var n=state.journey.length,di=dayIdx(),st=streak(),pend=[];
+  for(var i=0;i<n&&i<=di;i++){if(!state.done[i])pend.push(i);}
+  if(doneCount()===n)return {m:'cheer',t:'¡Completaste toda la ruta, '+first()+'! Estoy muy orgulloso.'};
+  if(di<n&&state.done[di]&&!pend.length)return {m:'sleep',t:'Hoy ya cumpliste. Me voy a dormir un ratito; el próximo nivel se abre en '+untilTomorrow()+'.'};
+  if(pend.length&&!(di<n&&!state.done[di]))return {m:'think',t:'Te quedan niveles pendientes. No pasa nada, yo te acompaño a ponerte al día.'};
+  var title=lessonOf(Math.min(di,n-1)).t;
+  if(st>=3)return {m:'cheer',t:'¡'+st+' días seguidos! Hoy toca “'+title+'”. No rompamos la racha.'};
+  return {m:'happy',t:'¡Hola, '+first()+'! Hoy toca “'+title+'”. Son solo unos minutos.'};
+}
+function viewRuta(){
+  var n=state.journey.length,di=dayIdx(),st=streak(),lv=Math.floor(state.xp/100)+1;
+  var offs=[0,30,48,30,0,-30,-48,-30];
+  var pend=[];for(var i=0;i<n&&i<=di;i++){if(!state.done[i])pend.push(i);}
+  var card='';
+  if(doneCount()===n){
+    card='<div class="today rest"><p class="label">Ruta completa</p><h2>Terminaste los '+n+' niveles</h2><p class="muted">Repasa cuando quieras y sigue escribiendo en tu diario.</p></div>';
+  }else if(di<n&&!state.done[di]){
+    var L=lessonOf(di),sk=SK[state.journey[di].s];
+    card='<div class="today"><p class="label">Nivel de hoy · Día '+(di+1)+'</p><h2>'+esc(L.t)+'</h2><p style="opacity:.9">'+esc(sk.name)+'</p><button class="btn" data-act="open" data-i="'+di+'">'+ic('play',18)+' Empezar nivel</button></div>';
+  }else if(pend.length){
+    var pi=pend[0];
+    card='<div class="today"><p class="label">Tienes un nivel pendiente</p><h2>'+esc(lessonOf(pi).t)+'</h2><p style="opacity:.9">Nivel '+(pi+1)+' · '+esc(SK[state.journey[pi].s].name)+'</p><button class="btn" data-act="open" data-i="'+pi+'">'+ic('play',18)+' Retomar</button></div>';
+  }else{
+    card='<div class="today rest"><p class="label">Listo por hoy</p><h2>Nivel completado</h2><p class="muted">El nivel '+(di+2)+' se desbloquea en '+untilTomorrow()+'.</p></div>';
+  }
+  if(pend.length>1&&di<n&&!state.done[di]){
+    card+='<p class="small" style="color:var(--hot);font-weight:700;margin-top:10px">Además tienes '+(pend.length-1)+' nivel'+(pend.length>2?'es':'')+' atrasado'+(pend.length>2?'s':'')+' en la ruta.</p>';
+  }
+  var pr=weakest(3).map(function(s){return '<span class="chip" style="background:'+s.c+';color:#fff">'+esc(s.name)+'</span>';}).join('');
+  var path='';
+  for(var k=0;k<n;k++){
+    var j=state.journey[k],s=SK[j.s],L2=LESSONS[j.s][j.l],cls,sub;
+    if(state.done[k]){cls='done';sub=esc(s.name)+' · completado';}
+    else if(k===di){cls='today';sub=esc(s.name)+' · hoy';}
+    else if(k<di){cls='late';sub=esc(s.name)+' · <span class="late">atrasado</span>';}
+    else{cls='locked';sub='Se desbloquea el '+fmt(addDays(state.start,k));}
+    var icon=cls==='done'?ic('check',34):cls==='locked'?ic('lock',28):ic(j.s,32);
+    var sitter='';
+    if(k===di&&!state.done[k])sitter='<span class="sitter">'+mascot(62,'happy','')+'</span>';
+    else if(k===di+1&&state.done[di])sitter='<span class="sitter">'+mascot(62,'sleep','')+'</span>';
+    path+='<div class="step" style="--off:'+offs[k%offs.length]+'px"><div class="nodew"><button class="node '+cls+'" style="--c:'+s.c+'" data-act="open" data-i="'+k+'" aria-label="Nivel '+(k+1)+': '+esc(L2.t)+'">'+icon+'</button>'+sitter+'</div><div class="step-t"><b>'+(k+1)+'. '+esc(L2.t)+'</b><span>'+sub+'</span></div></div>';
+  }
+  var rs=rutaSay();
+  return '<div class="top"><div><p class="label">'+esc(state.program)+'</p><h1>Hola, '+esc(first())+'</h1></div><div class="stats"><span class="stat hot" title="Racha">'+ic('flame',18)+st+'</span><span class="stat xp" title="Experiencia">'+ic('bolt',18)+state.xp+'</span></div></div>'+
+  '<div class="stack">'+mrow(92,rs.m,rs.t)+card+'</div><div class="prios"><span class="label">Tus prioridades</span>'+pr+'</div>'+
+  '<div class="row" style="justify-content:space-between;margin-top:26px"><h2 style="font-size:1.25rem">Tu ruta</h2><span class="muted small">'+doneCount()+' de '+n+' niveles · nivel '+lv+'</span></div><div class="path">'+path+'</div>';
+}
+
+/* ---------- Diario ---------- */
+function viewDiario(){
+  var di=Math.max(0,dayIdx());var prompt=PROMPTS[di%PROMPTS.length];
+  var open=ui.diaryOpen||state.diary.length===0;
+  var compose;
+  if(open){
+    compose='<div class="card stack"><div class="moods">'+MOODS.map(function(m){return '<button class="chip'+(ui.draft.mood===m?' on':'')+'" data-act="mood" data-m="'+esc(m)+'">'+esc(m)+'</button>';}).join('')+'</div>'+
+    '<textarea id="diary-text" aria-label="Tu entrada del diario" placeholder="Escribe lo que quieras recordar de hoy…">'+esc(ui.draft.text)+'</textarea>'+
+    '<div class="field"><label for="diary-skill">Habilidad relacionada (opcional)</label><select id="diary-skill"><option value="">Ninguna</option>'+SKILLS.map(function(s){return '<option value="'+s.id+'"'+(ui.draft.skill===s.id?' selected':'')+'>'+esc(s.name)+'</option>';}).join('')+'</select></div>'+
+    '<div class="row"><button id="btn-diary" class="btn primary" data-act="diary-save"'+(ui.draft.text.trim().length>=3?'':' disabled')+'>Guardar entrada</button>'+(state.diary.length?'<button class="btn" data-act="diary-close">Cancelar</button>':'')+'</div></div>';
+  }else{
+    compose='<button class="btn primary big" data-act="diary-open">'+ic('pen',18)+' Escribir una entrada</button>';
+  }
+  var list=state.diary.filter(function(e){return ui.filter==='todas'||(ui.filter==='reflexion'&&e.type==='reflexion')||(ui.filter==='libre'&&e.type==='libre');});
+  var items=list.map(function(e){
+    var s=e.skill?SK[e.skill]:null;
+    var del=ui.delId===e.id?'<div class="confirm"><span>¿Eliminar esta entrada?</span><div class="row"><button class="btn danger sm" data-act="del-yes" data-id="'+e.id+'">Eliminar</button><button class="btn sm" data-act="del-no">Cancelar</button></div></div>':'';
+    return '<article class="card entry"><div class="meta">'+(s?'<span class="sk-dot" style="--c:'+s.c+'">'+ic(s.id,14)+'</span>':'')+'<span>'+fmt(e.date)+'</span>'+(e.mood?'<span class="chip">'+esc(e.mood)+'</span>':'')+(e.type==='reflexion'?'<span class="chip">Reflexión de nivel</span>':'')+'<span style="flex:1"></span><button class="icon-btn" style="width:36px;height:36px" data-act="del-ask" data-id="'+e.id+'" aria-label="Eliminar entrada">'+ic('trash',18)+'</button></div>'+
+    (e.prompt?'<p class="q">'+esc(e.prompt)+'</p>':'')+'<p class="t">'+esc(e.text)+'</p>'+del+'</article>';
+  }).join('');
+  var empty=state.diary.length?'<p class="muted" style="text-align:center;padding:20px 0">No hay entradas en este filtro.</p>':'';
+  var say=state.diary.length?prompt:'Aquí vamos a guardar tus recuerdos. '+prompt;
+  return '<div class="top"><h1>Mi diario</h1><span class="muted small">'+state.diary.length+' entrada'+(state.diary.length===1?'':'s')+'</span></div><div class="stack">'+mrow(88,'think',say)+compose+
+  '<div class="moods">'+[['todas','Todas'],['reflexion','Reflexiones'],['libre','Libres']].map(function(f){return '<button class="chip'+(ui.filter===f[0]?' on':'')+'" data-act="filter" data-f="'+f[0]+'">'+f[1]+'</button>';}).join('')+'</div>'+
+  (items||empty)+'</div>';
+}
+
+/* ---------- Calendario ---------- */
+function viewCal(){
+  var c=ui.cal,t=today();
+  var lead=(new Date(c.y,c.m,1).getDay()+6)%7,days=new Date(c.y,c.m+1,0).getDate();
+  var diaryDates={};state.diary.forEach(function(e){diaryDates[e.date]=1;});
+  var cells='';
+  ['L','M','M','J','V','S','D'].forEach(function(w){cells+='<span class="wd">'+w+'</span>';});
+  for(var i=0;i<lead;i++)cells+='<span class="cd empty"></span>';
+  for(var n=1;n<=days;n++){
+    var ds=c.y+'-'+pad(c.m+1)+'-'+pad(n),li=diffDays(state.start,ds),isL=li>=0&&li<state.journey.length,cls='cd',mark='';
+    if(isL){if(state.done[li]){cls+=' done';mark=ic('check',13);}else if(ds<=t){cls+=' open';}else{cls+=' locked';}}
+    if(ds===t)cls+=' today';
+    if(ds===c.sel)cls+=' sel';
+    cells+='<button class="'+cls+'" data-act="cal-sel" data-d="'+ds+'" aria-label="'+fmt(ds)+'"><span>'+n+'</span>'+mark+(diaryDates[ds]?'<i class="dd"></i>':'')+'</button>';
+  }
+  var sel=c.sel,li2=diffDays(state.start,sel),detail='',mm='think',mt='';
+  if(li2>=0&&li2<state.journey.length){
+    var j=state.journey[li2],s=SK[j.s],L=lessonOf(li2),status;
+    if(state.done[li2]){status='Completado';mm='cheer';mt='¡Este día lo lograste!';}
+    else if(sel<=t){status=sel===t?'Disponible hoy':'Pendiente';mm='happy';mt=sel===t?'Este nivel te está esperando.':'Este nivel quedó pendiente. Aún estás a tiempo.';}
+    else{status='Se desbloquea el '+fmt(sel);mm='sleep';mt='Este nivel todavía duerme. Se abre el '+fmt(sel)+'.';}
+    detail+='<div class="row" style="flex-wrap:nowrap;align-items:flex-start"><span class="sk-dot" style="--c:'+s.c+';width:40px;height:40px">'+ic(j.s,20)+'</span><div style="min-width:0"><p class="label">Nivel '+(li2+1)+' · '+esc(status)+'</p><b>'+esc(L.t)+'</b><p class="muted small">'+esc(s.name)+'</p></div></div>';
+    if(sel<=t)detail+='<button class="btn primary" data-act="open" data-i="'+li2+'" style="margin-top:12px">'+(state.done[li2]?'Repasar nivel':'Ir al nivel')+'</button>';
+  }else{
+    mt=sel<state.start?'Este día es anterior al inicio de tu ruta.':'No hay nivel este día. ¡Aprovecha para escribir en tu diario!';
+    detail+='<p class="muted">'+(sel<state.start?'Este día es anterior al inicio de tu ruta.':'No hay nivel este día.')+'</p>';
+  }
+  var es=state.diary.filter(function(e){return e.date===sel;});
+  if(es.length){detail+='<div class="stack" style="margin-top:14px"><p class="label">Diario de este día</p>'+es.map(function(e){return '<div style="border-top:1.5px solid var(--line);padding-top:10px"><p class="small" style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(e.text.length>160?e.text.slice(0,160)+'…':e.text)+'</p></div>';}).join('')+'</div>';}
+  return '<div class="top"><h1>Calendario</h1><button class="btn sm" data-act="cal-today">Hoy</button></div>'+
+  '<div class="card"><div class="cal-head"><button class="icon-btn" data-act="cal-prev" aria-label="Mes anterior">'+ic('left')+'</button><h2>'+MESES[c.m]+' '+c.y+'</h2><button class="icon-btn" data-act="cal-next" aria-label="Mes siguiente">'+ic('right')+'</button></div><div class="cal-grid">'+cells+'</div>'+
+  '<div class="legend"><span><i style="background:var(--good-soft);box-shadow:inset 0 0 0 1.5px var(--good)"></i>Hecho</span><span><i style="background:var(--brand-soft);box-shadow:inset 0 0 0 2px var(--brand-t)"></i>Disponible</span><span><i style="box-shadow:inset 0 0 0 1.5px var(--line)"></i>Bloqueado</span><span><i style="background:var(--hot);border-radius:50%;width:8px;height:8px"></i>Diario</span></div></div>'+
+  '<div class="stack" style="margin-top:14px">'+mrow(80,mm,mt)+'<div class="card"><p class="label" style="margin-bottom:8px">'+fmt(sel)+'</p>'+detail+'</div></div>';
+}
+
+/* ---------- Perfil ---------- */
+function badges(){
+  var st=streak(),full=SKILLS.some(function(s){return state.journey.some(function(j){return j.s===s.id;})&&state.journey.every(function(j,i){return j.s!==s.id||state.done[i];});});
+  return [
+    {n:'Diagnóstico listo',d:'Conoces tu punto de partida',on:true},
+    {n:'Primer paso',d:'Completa tu primer nivel',on:doneCount()>=1},
+    {n:'Racha de 3 días',d:'Tres días seguidos',on:st>=3},
+    {n:'Racha de 7 días',d:'Una semana sin parar',on:st>=7},
+    {n:'Diario abierto',d:'Escribe 3 entradas',on:state.diary.length>=3},
+    {n:'Habilidad dominada',d:'Termina todos los niveles de una habilidad',on:full},
+    {n:'Ruta completa',d:'Termina todos los niveles',on:doneCount()===state.journey.length}
+  ];
+}
+function viewPerfil(){
+  var ini=state.name.trim().split(/\s+/).slice(0,2).map(function(w){return w[0]||'';}).join('').toUpperCase();
+  var lv=Math.floor(state.xp/100)+1,prio={};weakest(3).forEach(function(x){prio[x.id]=1;});
+  var st=streak(),n=state.journey.length;
+  var pm='happy',pt='Aún no empezamos nuestro primer nivel. ¡Vamos, '+first()+'!';
+  if(doneCount()>0){pm=st>=3?'cheer':'happy';pt='Llevamos '+doneCount()+' de '+n+' niveles y '+state.xp+' XP. '+(st>=3?'¡'+st+' días de racha, qué crack!':'¡Sigue así!');}
+  var groups=CATS.map(function(c){
+    var sk=sortedSkills(state.scores).filter(function(x){return x.cat===c.id;});
+    var avg=Math.round(sk.reduce(function(a,x){return a+curPct(x.id);},0)/sk.length);
+    return '<div style="'+cs(c)+';margin-top:14px"><div class="cat-h"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><b class="cat-t">'+c.name+'</b><span class="num">'+avg+'%</span></div></div>'+
+    sk.map(function(x){var b=pctOf(x.id),cp=curPct(x.id),tot=state.journey.filter(function(j){return j.s===x.id;}).length;return '<div class="skrow" style="--c:'+x.c+'"><div class="row" style="justify-content:space-between;flex-wrap:nowrap"><span class="row" style="flex-wrap:nowrap;min-width:0"><span class="sk-dot">'+ic(x.id,15)+'</span><b>'+esc(x.name)+'</b></span>'+(prio[x.id]?'<span class="chip prio">Prioridad</span>':'')+'</div><div class="track"><i class="base" style="width:'+b+'%"></i><i class="now" style="width:'+cp+'%"></i></div><span class="muted small">Inicio '+b+'% · ahora '+cp+'% (estimado) · '+doneOfSkill(x.id)+' de '+tot+' niveles</span></div>';}).join('')+'</div>';
+  }).join('');
+  var bd=badges().map(function(b){return '<div class="badge'+(b.on?' on':'')+'"><b>'+esc(b.n)+'</b><span>'+esc(b.d)+'</span></div>';}).join('');
+  var sems='';for(var i=1;i<=10;i++)sems+='<option value="'+i+'"'+(String(state.semester)===String(i)?' selected':'')+'>'+i+'.º semestre</option>';
+  var progs=PROGRAMS.map(function(p){return '<option'+(state.program===p?' selected':'')+'>'+esc(p)+'</option>';}).join('');
+  function cf(name,txt,btn){return ui.confirm===name?'<div class="confirm"><span>'+txt+'</span><div class="row"><button class="btn danger sm" data-act="'+name+'-yes">'+btn+'</button><button class="btn sm" data-act="conf-no">Cancelar</button></div></div>':'';}
+  return '<div class="top"><h1>Perfil</h1></div><div class="stack">'+mrow(104,pm,pt)+
+  '<div class="card"><div class="row" style="flex-wrap:nowrap;gap:16px"><div class="avatar">'+esc(ini)+'</div><div style="min-width:0"><h2 style="font-size:1.4rem">'+esc(state.name)+'</h2><p class="muted">'+esc(state.program)+' · '+esc(state.semester)+'.º semestre</p></div></div>'+
+  '<div class="kpis" style="margin-top:16px"><div class="kpi"><span class="label">Racha</span><b>'+st+' d</b></div><div class="kpi"><span class="label">Experiencia</span><b>'+state.xp+'</b></div><div class="kpi"><span class="label">Nivel</span><b>'+lv+'</b></div><div class="kpi"><span class="label">Niveles hechos</span><b>'+doneCount()+'/'+n+'</b></div></div></div>'+
+  '<div class="card"><h2 style="font-size:1.2rem;margin-bottom:6px">Mis habilidades</h2><p class="muted small">La barra clara es tu diagnóstico y la intensa tu avance estimado.</p>'+groups+'</div>'+
+  '<div class="card"><h2 style="font-size:1.2rem;margin-bottom:12px">Insignias</h2><div class="badges">'+bd+'</div></div>'+
+  '<div class="card stack"><h2 style="font-size:1.2rem">Ajustes</h2>'+
+  '<div class="field"><label for="e-name">Nombre</label><input id="e-name" type="text" maxlength="40" value="'+esc(state.name)+'"></div>'+
+  '<div class="field"><label for="e-prog">Programa</label><select id="e-prog">'+progs+'</select></div>'+
+  '<div class="field"><label for="e-sem">Semestre</label><select id="e-sem">'+sems+'</select></div>'+
+  '<button class="btn primary" data-act="edit-save">Guardar cambios</button>'+
+  '<button class="btn" data-act="retake">Repetir el diagnóstico</button>'+cf('retake','Se crea una ruta nueva y se reinician tus niveles y XP. Tu diario se conserva.','Repetir')+
+  '<button class="btn" data-act="wipe" style="color:var(--bad)">Borrar todos mis datos</button>'+cf('wipe','Se borrarán tu perfil, tu progreso y tu diario.','Borrar todo')+'</div>'+
+  '<div class="card stack" style="border:2px dashed var(--line)"><div><p class="label">Herramienta de prototipo</p><p class="muted small">Los niveles se abren uno por día. Para probar la app sin esperar, simula que pasa un día.</p></div><div class="row"><button class="btn sm" data-act="demo-next">Simular un día más</button><button class="btn sm" data-act="demo-reset"'+(state.demo?'':' disabled')+'>Volver a hoy</button></div><p class="muted small">Hoy en la app: '+fmt(today())+(state.demo?' (simulado, +'+state.demo+')':'')+'</p></div>'+
+  '</div>';
+}
+
+/* ---------- Lección ---------- */
+function prep(ex){
+  if(ex.k==='choice')return {opts:shuffle(ex.o.map(function(t,i){return {t:t,i:i};})),sel:null};
+  if(ex.k==='order'){var bank,tr=0;do{bank=shuffle(ex.items.map(function(_,i){return i;}));tr++;}while(tr<8&&bank.every(function(v,i){return v===i;}));return {bank:bank,ans:[]};}
+  if(ex.k==='match')return {right:shuffle(ex.pairs.map(function(_,i){return i;})),done:ex.pairs.map(function(){return false;}),selL:null,miss:0,flash:-1};
+  return {text:''};
+}
+function curEx(){return ui.lesson.lesson.ex[ui.lesson.ei];}
+function openLesson(i,review){
+  var j=state.journey[i],lesson=LESSONS[j.s][j.l];
+  ui.lesson={idx:i,skill:j.s,lesson:lesson,ei:0,p:prep(lesson.ex[0]),phase:'q',fb:null,xp:0,ok:0,tot:0,review:review,exit:false};
+  renderLesson();
+}
+function tipFor(ex){
+  if(ex.k==='choice')return pick(['Lee con calma y elige lo que haría alguien con experiencia.','Piensa en una situación real de tu carrera.','No hay prisa. Elige la que más te sirva.']);
+  if(ex.k==='order')return 'Toca los pasos en orden. Si te equivocas, tócalos de nuevo para quitarlos.';
+  if(ex.k==='match')return 'Toca uno de la izquierda y luego su pareja de la derecha.';
+  return 'Esta es para ti. Escribe con sinceridad: se guarda en tu diario.';
+}
+function confetti(){
+  var cols=['var(--g1)','var(--g2)','var(--g3)','var(--xp)','var(--good-f)','var(--emo)'],h='';
+  for(var i=0;i<18;i++)h+='<span class="confetti" style="left:'+(4+i*5.3)+'%;background:'+cols[i%cols.length]+';animation-delay:'+((i*0.37)%2.2).toFixed(2)+'s;animation-duration:'+(2.2+(i%4)*0.4).toFixed(1)+'s"></span>';
+  return h;
+}
+function renderLesson(){
+  var el=$('#lesson'),L=ui.lesson;
+  if(!L){el.hidden=true;el.innerHTML='';document.body.classList.remove('lock');return;}
+  el.hidden=false;document.body.classList.add('lock');
+  var sk=SK[L.skill],total=L.lesson.ex.length;
+  if(L.phase==='summary'){
+    var idx=L.idx,n=state.journey.length,di=dayIdx(),nxt='';
+    if(idx+1<n){nxt=(idx+1<=di)?'El siguiente nivel ya está disponible.':'El siguiente nivel se desbloquea el '+fmt(addDays(state.start,idx+1))+'. ¡Vuelve mañana!';}
+    else nxt='Terminaste toda la ruta.';
+    var good=L.tot?L.ok/L.tot>=0.5:true;
+    el.innerHTML='<div class="ls-body"><div class="sum">'+confetti()+'<button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(170,good?'cheer':'happy','')+'</button><div class="say up"><span class="say-t">'+esc(L.review?'¡Buen repaso, '+first()+'!':'¡Lo lograste, '+first()+'! Ese nivel ya es tuyo.')+'</span></div><h1 style="font-size:1.9rem">'+(L.review?'Repaso terminado':'Nivel completado')+'</h1><p class="muted">'+esc(L.lesson.t)+'</p>'+
+    '<div class="sum-stats"><div><b style="color:var(--xp)">+'+L.xp+'</b><span class="muted small">XP</span></div><div><b>'+L.ok+'/'+L.tot+'</b><span class="muted small">aciertos</span></div><div><b style="color:var(--hot)">'+streak()+'</b><span class="muted small">racha</span></div></div>'+
+    '<p class="muted">'+(L.review?'Repasar no suma XP.':esc(nxt))+'</p></div></div><div class="ls-foot"><button class="btn primary big" data-act="lesson-close">Volver a la ruta</button></div>';
+    aim();return;
+  }
+  var ex=curEx(),p=L.p,fb=L.phase==='fb',body='',foot='';
+  if(ex.k==='choice'){
+    body='<p class="ls-kind">Elige la mejor opción</p><h2 class="ls-q">'+esc(ex.q)+'</h2><div class="opts">'+p.opts.map(function(o,k){
+      var c='opt'+(p.sel===k?' on':'');
+      if(fb){if(o.i===ex.a)c='opt right';else if(p.sel===k)c='opt wrong';else c='opt';}
+      return '<button class="'+c+'" data-act="pick" data-i="'+k+'"'+(fb?' disabled':'')+'>'+esc(o.t)+'</button>';}).join('')+'</div>';
+    if(!fb)foot='<button class="btn primary big" data-act="check"'+(p.sel===null?' disabled':'')+'>Comprobar</button>';
+  }else if(ex.k==='order'){
+    var slots='';
+    for(var s=0;s<ex.items.length;s++){
+      if(s<p.ans.length){var v=p.ans[s],cc='chipx'+(fb?(v===s?' right':' wrong'):'');slots+='<li><button class="'+cc+'" data-act="ord-rem" data-i="'+s+'"'+(fb?' disabled':'')+'>'+esc(ex.items[v])+'</button></li>';}
+      else slots+='<li><span class="slot-empty"></span></li>';
+    }
+    body='<p class="ls-kind">Ordena los pasos</p><h2 class="ls-q">'+esc(ex.q)+'</h2><ol class="slots">'+slots+'</ol>'+(fb?'':'<div class="bank">'+p.bank.map(function(v){return '<button class="chipx" data-act="ord-add" data-i="'+v+'">'+esc(ex.items[v])+'</button>';}).join('')+'</div>');
+    if(!fb)foot='<button class="btn primary big" data-act="check"'+(p.ans.length===ex.items.length?'':' disabled')+'>Comprobar</button>';
+  }else if(ex.k==='match'){
+    body='<p class="ls-kind">Une las parejas</p><h2 class="ls-q">'+esc(ex.q)+'</h2><div class="mt"><div class="mcol">'+ex.pairs.map(function(pr,i){return '<button class="mi'+(p.done[i]?' ok':'')+(p.selL===i?' on':'')+'" data-act="m-left" data-i="'+i+'"'+(p.done[i]?' disabled':'')+'>'+esc(pr[0])+'</button>';}).join('')+'</div><div class="mcol">'+p.right.map(function(r){return '<button class="mi'+(p.done[r]?' ok':'')+(p.flash===r?' bad':'')+'" data-act="m-right" data-i="'+r+'"'+(p.done[r]?' disabled':'')+'>'+esc(ex.pairs[r][1])+'</button>';}).join('')+'</div></div>';
+  }else{
+    body='<p class="ls-kind">Reflexión para tu diario</p><h2 class="ls-q">'+esc(ex.q)+'</h2><textarea id="ref-text" aria-label="Tu reflexión" placeholder="'+esc(ex.hint)+'">'+esc(p.text)+'</textarea><p class="muted small">'+(L.review?'En el repaso no se guarda en el diario.':'Se guarda en Mi diario.')+'</p>';
+    foot='<button id="btn-ref" class="btn primary big" data-act="reflect-save"'+(p.text.trim().length>=8?'':' disabled')+'>'+(L.review?'Continuar':'Guardar y continuar')+'</button>';
+  }
+  if(fb){foot='<div class="fb '+(L.fb.good?'good':'bad')+'"><b>'+(L.fb.good?'Para recordar':'Para tener en cuenta')+'</b>'+(L.fb.msg?'<p>'+esc(L.fb.msg)+'</p>':'')+'</div><button class="btn primary big" data-act="next">Continuar</button>';}
+  if(!L.tip||L.tipEi!==L.ei){L.tip=tipFor(ex);L.tipEi=L.ei;}
+  var mood=fb?(L.fb.good?'cheer':'oops'):(ex.k==='reflect'?'happy':'think');
+  var mrowH=mrow(76,mood,fb?L.fb.title:L.tip,fb?(L.fb.good?'hop':'shake'):'');
+  var exitBox=L.exit?'<div class="confirm"><span>¿Salir de la lección? Perderás el avance de este nivel.</span><div class="row"><button class="btn danger sm" data-act="lesson-quit">Salir</button><button class="btn sm" data-act="exit-no">Seguir</button></div></div>':'';
+  el.innerHTML='<div class="ls-head"><button class="icon-btn" data-act="lesson-exit" aria-label="Salir de la lección">'+ic('x')+'</button><div class="progress"><i style="width:'+(L.ei/total*100)+'%"></i></div><span class="sk-dot" style="--c:'+sk.c+'" title="'+esc(sk.name)+'">'+ic(sk.id,15)+'</span></div><div class="ls-body">'+exitBox+mrowH+body+'</div><div class="ls-foot">'+foot+'</div>';
+  aim();
+}
+function advance(){
+  var L=ui.lesson;L.ei++;
+  if(L.ei>=L.lesson.ex.length){
+    if(L.review){L.xp=0;}
+    else{L.xp+=20;state.done[L.idx]={date:today(),xp:L.xp,ok:L.ok,tot:L.tot};state.xp+=L.xp;save();sendSheetEvent('nivel_completado',{lessonIndex:L.idx,skill:L.skill,lessonTitle:L.lesson.t,xp:L.xp,ok:L.ok,tot:L.tot});}
+    L.phase='summary';
+  }else{L.p=prep(curEx());L.phase='q';L.fb=null;}
+  renderLesson();
+}
+
+/* ---------- Render principal ---------- */
+function navHtml(){
+  var items=[['ruta','route','Ruta'],['diario','book','Diario'],['cal','cal','Calendario'],['perfil','user','Perfil']];
+  return '<div class="nav-in">'+items.map(function(i){return '<button class="'+(ui.view===i[0]?'on':'')+'" data-act="nav" data-v="'+i[0]+'">'+ic(i[1],24)+'<span>'+i[2]+'</span></button>';}).join('')+'</div>';
+}
+function render(){
+  var app=$('#app'),nav=$('#nav');
+  if(!state.onboarded){nav.hidden=true;app.innerHTML=viewOnboarding();aim();return;}
+  if(!ui.cal){var t=parse(today());ui.cal={y:t.getFullYear(),m:t.getMonth(),sel:today()};}
+  nav.hidden=false;nav.innerHTML=navHtml();
+  var v=ui.view;
+  app.innerHTML=v==='ruta'?viewRuta():v==='diario'?viewDiario():v==='cal'?viewCal():viewPerfil();
+  aim();
+}
+
+/* ---------- Vida de la mascota: parpadeo, mirada y saltos ---------- */
+var ptr=null,lastPtr=0,raf=0;
+function mascots(){return document.querySelectorAll('.mascot');}
+function aim(){
+  if(!ptr)return;
+  mascots().forEach(function(m){
+    var r=m.getBoundingClientRect();if(!r.width)return;
+    var dx=ptr.x-(r.left+r.width/2),dy=ptr.y-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,k=Math.min(1,d/160);
+    m.style.setProperty('--lx',(dx/d*k).toFixed(2));m.style.setProperty('--ly',(dy/d*k).toFixed(2));
+  });
+}
+document.addEventListener('pointermove',function(e){
+  ptr={x:e.clientX,y:e.clientY};lastPtr=Date.now();
+  if(!raf)raf=requestAnimationFrame(function(){raf=0;aim();});
+});
+setInterval(function(){
+  if(Date.now()-lastPtr<4000)return;
+  ptr=null;var x=(Math.random()*2-1).toFixed(2),y=(Math.random()*1.4-.7).toFixed(2);
+  mascots().forEach(function(m){m.style.setProperty('--lx',x);m.style.setProperty('--ly',y);});
+},2800);
+function blinkLoop(){
+  setTimeout(function(){
+    mascots().forEach(function(m){m.classList.add('blink');});
+    setTimeout(function(){
+      mascots().forEach(function(m){m.classList.remove('blink');});
+      if(Math.random()<.25){setTimeout(function(){mascots().forEach(function(m){m.classList.add('blink');});setTimeout(function(){mascots().forEach(function(m){m.classList.remove('blink');});},120);},180);}
+    },130);
+    blinkLoop();
+  },2200+Math.random()*3200);
+}
+blinkLoop();
+function hop(svg){svg.classList.remove('hop');void svg.getBoundingClientRect();svg.classList.add('hop');setTimeout(function(){svg.classList.remove('hop');},700);}
+
+/* ---------- Acciones ---------- */
+var A={
+ 'mtap':function(d,e,t){
+  var svg=t.querySelector('svg');if(svg)hop(svg);
+  var box=t.closest('.mrow,.mbox,.sum'),st=box&&box.querySelector('.say-t');
+  if(st)st.textContent=pick(TAPS);
+ },
+ 'ob-start':function(){ui.step='reg';render();},
+ 'prog':function(d){ui.reg.program=d.p;render();},
+ 'reg-next':function(){ui.reg.name=$('#f-name').value;ui.reg.sem=$('#f-sem').value;ui.step='diag';ui.q=0;ui.ans=[];render();},
+ 'diag-back':function(){if(ui.q>0){ui.q--;}else{ui.step='reg';}render();},
+ 'ans':function(d){
+  ui.ans[ui.q]=+d.v;
+  if(ui.q<DIAG.length-1){ui.q++;}
+  else{var sc={};DIAG.forEach(function(q,i){sc[q[0]]=ui.ans[i];});ui.scores=sc;ui.step='result';}
+  render();window.scrollTo(0,0);
+ },
+ 'ob-finish':function(){
+  state.name=ui.reg.name.trim();state.program=ui.reg.program;state.semester=String(ui.reg.sem);
+  state.answers=ui.ans.slice();state.scores=ui.scores;state.journey=buildJourney(ui.scores);
+  state.start=ymd(new Date());state.demo=0;state.done={};state.xp=0;state.onboarded=true;
+  save();sendSheetEvent('diagnostico_completado',{answers:state.answers,scores:state.scores,journey:state.journey.map(function(j){return j.s;})});ui.view='ruta';ui.cal=null;ui.confirm=null;render();window.scrollTo(0,0);
+ },
+ 'nav':function(d){ui.view=d.v;ui.confirm=null;ui.delId=null;render();window.scrollTo(0,0);},
+ 'open':function(d){
+  var i=+d.i;
+  if(i>dayIdx()){toast('Este nivel se desbloquea el '+fmt(addDays(state.start,i)));return;}
+  if(state.done[i])toast('Repaso: no suma XP');
+  openLesson(i,!!state.done[i]);
+ },
+ /* lección */
+ 'pick':function(d){ui.lesson.p.sel=+d.i;renderLesson();},
+ 'check':function(){
+  var L=ui.lesson,ex=curEx(),p=L.p,good;
+  if(ex.k==='choice'){
+    good=p.opts[p.sel].i===ex.a;L.tot++;if(good){L.ok++;L.xp+=10;}else{L.xp+=2;}
+    L.fb={good:good,title:pick(good?FB_OK:FB_NO),msg:(good?'':'La mejor opción era: “'+ex.o[ex.a]+'”. ')+ex.why};
+  }else{
+    good=p.ans.every(function(v,i){return v===i;});L.tot++;if(good){L.ok++;L.xp+=10;}else{L.xp+=2;}
+    L.fb={good:good,title:pick(good?FB_OK:FB_NO),msg:good?ex.why:'El orden correcto es: '+ex.items.map(function(t,i){return (i+1)+'. '+t;}).join('  ')};
+  }
+  L.phase='fb';renderLesson();
+ },
+ 'ord-add':function(d){var p=ui.lesson.p,v=+d.i,k=p.bank.indexOf(v);if(k>-1){p.bank.splice(k,1);p.ans.push(v);}renderLesson();},
+ 'ord-rem':function(d){var p=ui.lesson.p,k=+d.i;if(k<p.ans.length){var v=p.ans.splice(k,1)[0];p.bank.push(v);}renderLesson();},
+ 'm-left':function(d){ui.lesson.p.selL=+d.i;ui.lesson.p.flash=-1;renderLesson();},
+ 'm-right':function(d){
+  var L=ui.lesson,p=L.p,r=+d.i;
+  if(p.selL===null){toast('Primero toca un elemento de la izquierda');return;}
+  if(p.selL===r){
+    p.done[r]=true;p.selL=null;p.flash=-1;
+    if(p.done.every(Boolean)){
+      L.tot++;var good=p.miss===0;if(good)L.ok++;L.xp+=p.miss<=1?10:5;
+      L.fb={good:true,title:'¡Parejas completas!',msg:p.miss?'Tuviste '+p.miss+' intento'+(p.miss>1?'s':'')+' fallido'+(p.miss>1?'s':'')+'. Repásalas y sigue.':'Sin errores.'};
+      L.phase='fb';
+    }
+  }else{
+    p.miss++;p.flash=r;p.selL=null;
+    setTimeout(function(){if(ui.lesson===L&&L.p===p&&p.flash===r){p.flash=-1;renderLesson();}},700);
+  }
+  renderLesson();
+ },
+ 'reflect-save':function(){
+  var L=ui.lesson,ex=curEx(),txt=L.p.text.trim();
+  if(txt.length<8)return;
+  if(!L.review){L.xp+=15;state.diary.unshift({id:uid(),date:today(),type:'reflexion',skill:L.skill,prompt:ex.q,text:txt,mood:''});save();sendSheetEvent('reflexion',{skill:L.skill,prompt:ex.q,response:txt,mood:'',lessonIndex:L.idx});}
+  advance();
+ },
+ 'next':function(){advance();},
+ 'lesson-exit':function(){ui.lesson.exit=true;renderLesson();},
+ 'exit-no':function(){ui.lesson.exit=false;renderLesson();},
+ 'lesson-quit':function(){ui.lesson=null;renderLesson();render();},
+ 'lesson-close':function(){ui.lesson=null;renderLesson();render();window.scrollTo(0,0);},
+ /* diario */
+ 'diary-open':function(){ui.diaryOpen=true;render();},
+ 'diary-close':function(){ui.diaryOpen=false;ui.draft={mood:'',skill:'',text:''};render();},
+ 'mood':function(d){ui.draft.mood=ui.draft.mood===d.m?'':d.m;render();},
+ 'diary-save':function(){
+  var t=ui.draft.text.trim();if(t.length<3)return;
+  var di=Math.max(0,dayIdx());
+  state.diary.unshift({id:uid(),date:today(),type:'libre',skill:ui.draft.skill||'',prompt:PROMPTS[di%PROMPTS.length],text:t,mood:ui.draft.mood});
+  save();sendSheetEvent('entrada_diario',{skill:ui.draft.skill||'',prompt:PROMPTS[di%PROMPTS.length],response:t,mood:ui.draft.mood});ui.draft={mood:'',skill:'',text:''};ui.diaryOpen=false;render();toast('Entrada guardada');
+ },
+ 'filter':function(d){ui.filter=d.f;render();},
+ 'del-ask':function(d){ui.delId=d.id;render();},
+ 'del-no':function(){ui.delId=null;render();},
+ 'del-yes':function(d){state.diary=state.diary.filter(function(e){return e.id!==d.id;});ui.delId=null;save();render();toast('Entrada eliminada');},
+ /* calendario */
+ 'cal-sel':function(d){ui.cal.sel=d.d;render();},
+ 'cal-prev':function(){var c=ui.cal;c.m--;if(c.m<0){c.m=11;c.y--;}render();},
+ 'cal-next':function(){var c=ui.cal;c.m++;if(c.m>11){c.m=0;c.y++;}render();},
+ 'cal-today':function(){ui.cal=null;render();},
+ /* perfil */
+ 'edit-save':function(){
+  var n=$('#e-name').value.trim();if(n.length<2){toast('Escribe tu nombre');return;}
+  state.name=n;state.program=$('#e-prog').value;state.semester=$('#e-sem').value;save();sendSheetEvent('perfil_actualizado',{name:n,program:state.program,semester:state.semester});render();toast('Cambios guardados');
+ },
+ 'retake':function(){ui.confirm='retake';render();},
+ 'retake-yes':function(){ui.reg={name:state.name,program:state.program,sem:state.semester||'3'};state.onboarded=false;state.done={};state.xp=0;save();ui.confirm=null;ui.step='diag';ui.q=0;ui.ans=[];render();window.scrollTo(0,0);},
+ 'wipe':function(){ui.confirm='wipe';render();},
+ 'wipe-yes':function(){state=fresh();save();ui.reg={name:'',program:'',sem:'3'};ui.step='welcome';ui.view='ruta';ui.cal=null;ui.confirm=null;ui.diaryOpen=false;render();window.scrollTo(0,0);},
+ 'conf-no':function(){ui.confirm=null;render();},
+ 'demo-next':function(){state.demo++;save();ui.cal=null;render();toast('Hoy en la app: '+fmt(today()));},
+ 'demo-reset':function(){state.demo=0;save();ui.cal=null;render();toast('Volviste al día real');}
+};
+
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-act]');if(!t)return;
+  var f=A[t.dataset.act];if(f)f(t.dataset,e,t);
+});
+document.addEventListener('input',function(e){
+  var id=e.target.id,v=e.target.value;
+  if(id==='f-name'){ui.reg.name=v;var b=$('#btn-reg');if(b)b.disabled=!(v.trim().length>=2&&ui.reg.program);var sy=$('#say-reg');if(sy)sy.textContent=regSay();}
+  else if(id==='diary-text'){ui.draft.text=v;var b2=$('#btn-diary');if(b2)b2.disabled=v.trim().length<3;}
+  else if(id==='ref-text'&&ui.lesson){ui.lesson.p.text=v;var b3=$('#btn-ref');if(b3)b3.disabled=v.trim().length<8;}
+});
+document.addEventListener('change',function(e){
+  if(e.target.id==='diary-skill')ui.draft.skill=e.target.value;
+});
+
+render();
+})();
+</script>
+
+</body></html>
