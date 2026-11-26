@@ -81,12 +81,6 @@ button.chip.on{background:var(--brand);color:var(--brand-ink)}
 .mascot-img{display:grid;place-items:center;overflow:visible;line-height:0}
 .mascot-img img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(75,38,145,.18));user-select:none;-webkit-user-drag:none}
 .mascot-img .float{display:block;width:100%;height:100%;transform-box:fill-box;transform-origin:50% 100%}
-.cerebrito-eyes{position:absolute;inset:0;pointer-events:none;transform:translate(calc(var(--lx,0)*3px),calc(var(--ly,0)*2.5px));transition:transform .12s ease-out}
-.cerebrito-eye-glint{position:absolute;width:2.8%;height:4.2%;border-radius:50%;background:#fff;box-shadow:0 0 5px rgba(255,255,255,.8)}
-.cerebrito-eye-glint.left{left:47.1%;top:46.2%}
-.cerebrito-eye-glint.right{left:65.1%;top:45.7%}
-.mascot-img.blink .cerebrito-eyes{transform:translate(calc(var(--lx,0)*3px),calc(var(--ly,0)*2.5px)) scaleY(.08)}
-.mascot-img{position:relative}
 .mascot .halo{fill:var(--halo)}
 .mascot .b-dark{fill:#7355B5}
 .mascot .b-light{fill:#8767C6}
@@ -363,7 +357,7 @@ function mascot(size,mood,cls){
     sleep:'assets/cerebrito-feliz.png'
   };
   var src=moodMap[mood||'happy']||moodMap.happy;
-  return '<div class="mascot mascot-img'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" style="width:'+size+'px;height:'+h+'px" aria-hidden="true"><span class="float"><img src="'+src+'" width="'+size+'" height="'+h+'" alt=""><span class="cerebrito-eyes"><i class="cerebrito-eye-glint left"></i><i class="cerebrito-eye-glint right"></i></span></span></div>';
+  return '<div class="mascot mascot-img'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" style="width:'+size+'px;height:'+h+'px" aria-hidden="true"><span class="float"><img src="'+src+'" width="'+size+'" height="'+h+'" alt=""></span></div>';
 }
 function mrow(size,mood,text,cls,id){
   return '<div class="mrow"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(size,mood,cls)+'</button><div class="say"><span class="say-t"'+(id?' id="'+id+'"':'')+'>'+esc(text)+'</span></div></div>';
@@ -980,37 +974,8 @@ function render(){
   aim();
 }
 
-/* ---------- Vida de la mascota: parpadeo, mirada y saltos ---------- */
-var ptr=null,lastPtr=0,raf=0;
+/* ---------- Vida de la mascota: saludo y saltos ---------- */
 function mascots(){return document.querySelectorAll('.mascot');}
-function aim(){
-  if(!ptr)return;
-  mascots().forEach(function(m){
-    var r=m.getBoundingClientRect();if(!r.width)return;
-    var dx=ptr.x-(r.left+r.width/2),dy=ptr.y-(r.top+r.height/2),d=Math.hypot(dx,dy)||1,k=Math.min(1,d/160);
-    m.style.setProperty('--lx',(dx/d*k).toFixed(2));m.style.setProperty('--ly',(dy/d*k).toFixed(2));
-  });
-}
-document.addEventListener('pointermove',function(e){
-  ptr={x:e.clientX,y:e.clientY};lastPtr=Date.now();
-  if(!raf)raf=requestAnimationFrame(function(){raf=0;aim();});
-});
-setInterval(function(){
-  if(Date.now()-lastPtr<4000)return;
-  ptr=null;var x=(Math.random()*2-1).toFixed(2),y=(Math.random()*1.4-.7).toFixed(2);
-  mascots().forEach(function(m){m.style.setProperty('--lx',x);m.style.setProperty('--ly',y);});
-},2800);
-function blinkLoop(){
-  setTimeout(function(){
-    mascots().forEach(function(m){m.classList.add('blink');});
-    setTimeout(function(){
-      mascots().forEach(function(m){m.classList.remove('blink');});
-      if(Math.random()<.25){setTimeout(function(){mascots().forEach(function(m){m.classList.add('blink');});setTimeout(function(){mascots().forEach(function(m){m.classList.remove('blink');});},120);},180);}
-    },130);
-    blinkLoop();
-  },2200+Math.random()*3200);
-}
-blinkLoop();
 function hop(svg){svg.classList.remove('hop');void svg.getBoundingClientRect();svg.classList.add('hop');setTimeout(function(){svg.classList.remove('hop');},700);}
 function greetMascots(){
   mascots().forEach(function(m){
