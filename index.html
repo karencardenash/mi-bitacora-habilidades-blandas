@@ -78,6 +78,9 @@ button.chip.on{background:var(--brand);color:var(--brand-ink)}
 
 /* Mascota */
 .mascot{display:block;overflow:visible;flex:none;max-width:100%;height:auto}
+.mascot-img{display:grid;place-items:center;overflow:visible;line-height:0}
+.mascot-img img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 10px 16px rgba(75,38,145,.18));user-select:none;-webkit-user-drag:none}
+.mascot-img .float{display:block;width:100%;height:100%;transform-box:fill-box;transform-origin:50% 100%}
 .mascot .halo{fill:var(--halo)}
 .mascot .b-dark{fill:#7355B5}
 .mascot .b-light{fill:#8767C6}
@@ -344,24 +347,17 @@ function ic(n,s){s=s||22;return '<svg viewBox="0 0 24 24" width="'+s+'" height="
 /* ---------- Mascota ---------- */
 var BODY='M32 104C30 66 66 40 108 40C150 40 176 62 174 96C172 132 140 160 98 160C58 160 34 138 32 104Z';
 function mascot(size,mood,cls){
-  var h=Math.round(size*200/206);
-  return '<svg class="mascot'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" viewBox="0 0 206 200" width="'+size+'" height="'+h+'" aria-hidden="true">'+
-  '<ellipse class="halo" cx="103" cy="100" rx="94" ry="92"/>'+
-  '<g class="spark"><g transform="translate(26 42)"><path d="M0-9L2.4-2.4 9 0 2.4 2.4 0 9-2.4 2.4-9 0-2.4-2.4Z"/></g><g transform="translate(182 56)"><path d="M0-8L2.2-2.2 8 0 2.2 2.2 0 8-2.2 2.2-8 0-2.2-2.2Z"/></g><g transform="translate(172 160)"><path d="M0-7L2-2 7 0 2 2 0 7-2 2-7 0-2-2Z"/></g></g>'+
-  '<text class="zzz" x="150" y="52">z</text><text class="zzz z2" x="168" y="34">z</text>'+
-  '<g class="float">'+
-  '<path class="b-dark" d="'+BODY+'"/>'+
-  '<path class="b-light" transform="translate(-4 -5) translate(103 100) scale(.96) translate(-103 -100)" d="'+BODY+'"/>'+
-  '<g class="eye"><ellipse class="sclera" cx="80" cy="95" rx="9.5" ry="12.5"/><ellipse class="pupil" cx="80" cy="97" rx="5.5" ry="8"/></g>'+
-  '<g class="eye"><ellipse class="sclera" cx="125" cy="94" rx="9.5" ry="12.5"/><ellipse class="pupil" cx="125" cy="96" rx="5.5" ry="8"/></g>'+
-  '<path class="lid" d="M70 97Q80 105 90 97"/><path class="lid" d="M115 96Q125 104 135 96"/>'+
-  '<path class="mouth m-happy" d="M91 121Q102 129 113 121"/>'+
-  '<path class="mouth m-cheer" d="M88 117Q102 140 116 117Z"/>'+
-  '<path class="mouth m-oops" d="M93 128Q102 120 111 128"/>'+
-  '<path class="mouth m-think" d="M94 124L110 121"/>'+
-  '<ellipse class="mouth m-wow" cx="102" cy="124" rx="5" ry="6.5"/>'+
-  '<path class="mouth m-sleep" d="M96 123Q102 127 108 123"/>'+
-  '</g></svg>';
+  var h=size;
+  var moodMap={
+    happy:'assets/cerebrito-feliz.png',
+    cheer:'assets/cerebrito-medalla.png',
+    think:'assets/cerebrito-1.png',
+    oops:'assets/cerebrito-1.png',
+    wow:'assets/cerebrito-lupa.png',
+    sleep:'assets/cerebrito-feliz.png'
+  };
+  var src=moodMap[mood||'happy']||moodMap.happy;
+  return '<div class="mascot mascot-img'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" style="width:'+size+'px;height:'+h+'px" aria-hidden="true"><span class="float"><img src="'+src+'" width="'+size+'" height="'+h+'" alt=""></span></div>';
 }
 function mrow(size,mood,text,cls,id){
   return '<div class="mrow"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(size,mood,cls)+'</button><div class="say"><span class="say-t"'+(id?' id="'+id+'"':'')+'>'+esc(text)+'</span></div></div>';
@@ -1016,7 +1012,7 @@ var A={
  'notify-allow':function(){requestNotifications();},
  'notify-later':function(){state.notificationsAsked=true;save();closeNotificationPrompt();},
  'mtap':function(d,e,t){
-  var svg=t.querySelector('svg');if(svg)hop(svg);
+  var mascotEl=t.querySelector('.mascot')||t.closest('.mascot');if(mascotEl)hop(mascotEl);
   var box=t.closest('.mrow,.mbox,.sum'),st=box&&box.querySelector('.say-t');
   if(st)st.textContent=pick(TAPS);
  },
