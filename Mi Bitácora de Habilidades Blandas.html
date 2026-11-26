@@ -355,13 +355,20 @@ function mascot(size,mood,cls){
     think:'assets/cerebrito-1.png',
     oops:'assets/cerebrito-1.png',
     wow:'assets/cerebrito-lupa.png',
-    sleep:'assets/cerebrito-1.png'
+    sleep:'assets/cerebrito-1.png',
+    robot:'assets/personaje-robot.png',
+    rey:'assets/personaje-rey.png',
+    fantasma:'assets/personaje-fantasma.png'
   };
   var src=moodMap[mood||'happy']||moodMap.happy;
   return '<div class="mascot mascot-img'+(cls?' '+cls:'')+'" data-mood="'+(mood||'happy')+'" style="width:'+size+'px;height:'+h+'px" aria-hidden="true"><span class="float"><img src="'+src+'" width="'+size+'" height="'+h+'" alt=""></span></div>';
 }
 function mrow(size,mood,text,cls,id){
   return '<div class="mrow"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(size,mood,cls)+'</button><div class="say"><span class="say-t"'+(id?' id="'+id+'"':'')+'>'+esc(text)+'</span></div></div>';
+}
+function characterForLevel(levelIndex){
+  var characters=['robot','rey','fantasma'];
+  return characters[Math.max(0,levelIndex)%characters.length];
 }
 var TAPS=['¡Cosquillas!','Aquí estoy. ¿Seguimos?','Un nivel al día y llegamos lejos.','¡Tú puedes!','Respira, sonríe y vamos.','Hoy es buen día para practicar.','¡Qué bueno verte por aquí!','Me encantan tus ideas.','Poquito a poco se llega lejos.'];
 var FB_OK=['¡Eso es!','¡Muy bien!','¡Exacto!','¡Así se hace!'];
@@ -764,11 +771,12 @@ function viewRuta(){
     else{cls='locked';sub='Se desbloquea el '+fmt(addDays(state.start,k));}
     var icon=cls==='done'?ic('check',34):cls==='locked'?ic('lock',28):ic(j.s,32);
     var sitter='';
-    if(k===di&&!state.done[k])sitter='<span class="sitter">'+mascot(62,'happy','')+'</span>';
-    else if(k===di+1&&state.done[di])sitter='<span class="sitter">'+mascot(62,'sleep','')+'</span>';
+    if(k===di&&!state.done[k])sitter='<span class="sitter">'+mascot(62,characterForLevel(k),'')+'</span>';
+    else if(k===di+1&&state.done[di])sitter='<span class="sitter">'+mascot(62,characterForLevel(k),'')+'</span>';
     path+='<div class="step" style="--off:'+offs[k%offs.length]+'px"><div class="nodew"><button class="node '+cls+'" style="--c:'+s.c+'" data-act="open" data-i="'+k+'" aria-label="Nivel '+(k+1)+': '+esc(L2.t)+'">'+icon+'</button>'+sitter+'</div><div class="step-t"><b>'+(k+1)+'. '+esc(L2.t)+'</b><span>'+sub+'</span></div></div>';
   }
   var rs=rutaSay();
+  rs.m=characterForLevel(di<n?di:(pend.length?pend[0]:0));
   return '<div class="top"><div><p class="label">'+esc(state.program)+'</p><h1>Hola, '+esc(first())+'</h1></div><div class="stats"><span class="stat hot" title="Racha">'+ic('flame',18)+st+'</span><span class="stat xp" title="Experiencia">'+ic('bolt',18)+state.xp+'</span></div></div>'+
   '<div class="stack">'+mrow(92,rs.m,rs.t)+card+'</div><div class="prios"><span class="label">Tus prioridades</span>'+pr+'</div>'+
   '<div class="row" style="justify-content:space-between;margin-top:26px"><h2 style="font-size:1.25rem">Tu ruta</h2><span class="muted small">'+doneCount()+' de '+n+' niveles · nivel '+lv+'</span></div><div class="path">'+path+'</div>';
@@ -916,7 +924,7 @@ function renderLesson(){
     if(idx+1<n){nxt=(idx+1<=di)?'El siguiente nivel ya está disponible.':'El siguiente nivel se desbloquea el '+fmt(addDays(state.start,idx+1))+'. ¡Vuelve mañana!';}
     else nxt='Terminaste toda la ruta.';
     var good=L.tot?L.ok/L.tot>=0.5:true;
-    el.innerHTML='<div class="ls-body"><div class="sum">'+confetti()+'<button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(170,good?'cheer':'happy','')+'</button><div class="say up"><span class="say-t">'+esc(L.review?'¡Buen repaso, '+first()+'!':'¡Lo lograste, '+first()+'! Ese nivel ya es tuyo.')+'</span></div><h1 style="font-size:1.9rem">'+(L.review?'Repaso terminado':'Nivel completado')+'</h1><p class="muted">'+esc(L.lesson.t)+'</p>'+
+    el.innerHTML='<div class="ls-body"><div class="sum">'+confetti()+'<button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(170,characterForLevel(L.idx),'')+'</button><div class="say up"><span class="say-t">'+esc(L.review?'¡Buen repaso, '+first()+'!':'¡Lo lograste, '+first()+'! Ese nivel ya es tuyo.')+'</span></div><h1 style="font-size:1.9rem">'+(L.review?'Repaso terminado':'Nivel completado')+'</h1><p class="muted">'+esc(L.lesson.t)+'</p>'+
     '<div class="sum-stats"><div><b style="color:var(--xp)">+'+L.xp+'</b><span class="muted small">XP</span></div><div><b>'+L.ok+'/'+L.tot+'</b><span class="muted small">aciertos</span></div><div><b style="color:var(--hot)">'+streak()+'</b><span class="muted small">racha</span></div></div>'+
     '<p class="muted">'+(L.review?'Repasar no suma XP.':esc(nxt))+'</p></div></div><div class="ls-foot"><button class="btn primary big" data-act="lesson-close">Volver a la ruta</button></div>';
     return;
@@ -944,7 +952,7 @@ function renderLesson(){
   }
   if(fb){foot='<div class="fb '+(L.fb.good?'good':'bad')+'"><b>'+(L.fb.good?'Para recordar':'Para tener en cuenta')+'</b>'+(L.fb.msg?'<p>'+esc(L.fb.msg)+'</p>':'')+'</div><button class="btn primary big" data-act="next">Continuar</button>';}
   if(!L.tip||L.tipEi!==L.ei){L.tip=tipFor(ex);L.tipEi=L.ei;}
-  var mood=fb?(L.fb.good?'cheer':'oops'):(ex.k==='reflect'?'happy':'think');
+  var mood=characterForLevel(L.idx);
   var mrowH=mrow(76,mood,fb?L.fb.title:L.tip,fb?(L.fb.good?'hop':'shake'):'');
   var exitBox=L.exit?'<div class="confirm"><span>¿Salir de la lección? Perderás el avance de este nivel.</span><div class="row"><button class="btn danger sm" data-act="lesson-quit">Salir</button><button class="btn sm" data-act="exit-no">Seguir</button></div></div>':'';
   el.innerHTML='<div class="ls-head"><button class="icon-btn" data-act="lesson-exit" aria-label="Salir de la lección">'+ic('x')+'</button><div class="progress"><i style="width:'+(L.ei/total*100)+'%"></i></div><span class="sk-dot" style="--c:'+sk.c+'" title="'+esc(sk.name)+'">'+ic(sk.id,15)+'</span></div><div class="ls-body">'+exitBox+mrowH+body+'</div><div class="ls-foot">'+foot+'</div>';
