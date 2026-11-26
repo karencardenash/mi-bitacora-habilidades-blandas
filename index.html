@@ -919,7 +919,7 @@ function renderLesson(){
     el.innerHTML='<div class="ls-body"><div class="sum">'+confetti()+'<button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a la mascota">'+mascot(170,good?'cheer':'happy','')+'</button><div class="say up"><span class="say-t">'+esc(L.review?'¡Buen repaso, '+first()+'!':'¡Lo lograste, '+first()+'! Ese nivel ya es tuyo.')+'</span></div><h1 style="font-size:1.9rem">'+(L.review?'Repaso terminado':'Nivel completado')+'</h1><p class="muted">'+esc(L.lesson.t)+'</p>'+
     '<div class="sum-stats"><div><b style="color:var(--xp)">+'+L.xp+'</b><span class="muted small">XP</span></div><div><b>'+L.ok+'/'+L.tot+'</b><span class="muted small">aciertos</span></div><div><b style="color:var(--hot)">'+streak()+'</b><span class="muted small">racha</span></div></div>'+
     '<p class="muted">'+(L.review?'Repasar no suma XP.':esc(nxt))+'</p></div></div><div class="ls-foot"><button class="btn primary big" data-act="lesson-close">Volver a la ruta</button></div>';
-    aim();return;
+    return;
   }
   var ex=curEx(),p=L.p,fb=L.phase==='fb',body='',foot='';
   if(ex.k==='choice'){
@@ -948,7 +948,6 @@ function renderLesson(){
   var mrowH=mrow(76,mood,fb?L.fb.title:L.tip,fb?(L.fb.good?'hop':'shake'):'');
   var exitBox=L.exit?'<div class="confirm"><span>¿Salir de la lección? Perderás el avance de este nivel.</span><div class="row"><button class="btn danger sm" data-act="lesson-quit">Salir</button><button class="btn sm" data-act="exit-no">Seguir</button></div></div>':'';
   el.innerHTML='<div class="ls-head"><button class="icon-btn" data-act="lesson-exit" aria-label="Salir de la lección">'+ic('x')+'</button><div class="progress"><i style="width:'+(L.ei/total*100)+'%"></i></div><span class="sk-dot" style="--c:'+sk.c+'" title="'+esc(sk.name)+'">'+ic(sk.id,15)+'</span></div><div class="ls-body">'+exitBox+mrowH+body+'</div><div class="ls-foot">'+foot+'</div>';
-  aim();
 }
 function advance(){
   var L=ui.lesson;L.ei++;
@@ -967,17 +966,15 @@ function navHtml(){
 }
 function render(){
   var app=$('#app'),nav=$('#nav');
-  if(!state.onboarded){nav.hidden=true;app.innerHTML=viewOnboarding();aim();return;}
+  if(!state.onboarded){nav.hidden=true;app.innerHTML=viewOnboarding();return;}
   if(!ui.cal){var t=parse(today());ui.cal={y:t.getFullYear(),m:t.getMonth(),sel:today()};}
   nav.hidden=false;nav.innerHTML=navHtml();
   var v=ui.view;
   app.innerHTML=v==='ruta'?viewRuta():v==='diario'?viewDiario():v==='cal'?viewCal():viewPerfil();
-  aim();
 }
 
 /* ---------- Vida de la mascota: saludo y saltos ---------- */
 function mascots(){return document.querySelectorAll('.mascot');}
-function aim(){}
 function hop(svg){svg.classList.remove('hop');void svg.getBoundingClientRect();svg.classList.add('hop');setTimeout(function(){svg.classList.remove('hop');},700);}
 function greetMascots(){
   mascots().forEach(function(m){
