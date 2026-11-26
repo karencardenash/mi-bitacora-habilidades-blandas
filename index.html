@@ -685,7 +685,7 @@ function skillRows(sc,prio){
 function viewOnboarding(){
   var s=ui.step;
   if(s==='welcome'){
-    return '<div class="hero mbox"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a Cerebrito"><img class="welcome-cerebrito" src="assets/cerebrito-saludo.gif" alt="Cerebrito saludando"></button>'+
+    return '<div class="hero mbox"><button type="button" class="mbtn" data-act="mtap" aria-label="Tocar a Cerebrito"><img class="welcome-cerebrito" src="assets/cerebrito-saludo.gif?v=2" alt="Cerebrito saludando"></button>'+
     '<div class="say up"><span class="say-t">¡Hola! Soy Cerebrito y voy a acompañarte en cada nivel.</span></div>'+
     '<h1 class="ttl">Mi Bitácora de <span class="grad">Habilidades Blandas</span></h1>'+
     '<p class="muted">Un nivel nuevo cada día para reforzar las habilidades que más necesitas en tu carrera.</p>'+
@@ -977,6 +977,7 @@ function render(){
 
 /* ---------- Vida de la mascota: saludo y saltos ---------- */
 function mascots(){return document.querySelectorAll('.mascot');}
+function aim(){}
 function hop(svg){svg.classList.remove('hop');void svg.getBoundingClientRect();svg.classList.add('hop');setTimeout(function(){svg.classList.remove('hop');},700);}
 function greetMascots(){
   mascots().forEach(function(m){
